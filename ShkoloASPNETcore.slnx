@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="ShkoloASPNETcore/ShkoloASPNETcore.csproj" />
+  <Project Path="ShkoloASPNETcore.Infrastructure/ShkoloASPNETcore.Infrastructure.csproj" Id="09bca44c-3dd4-4294-b85d-fbad50c03aa5" />
+  <Project Path="ShkoloASPNETcore.Services/ShkoloASPNETcore.Services.csproj" Id="0d2a1bfb-25f5-422e-b45d-463d6e4d5fb9" />
+  <Project Path="ShkoloASPNETcore.Tests/ShkoloASPNETcore.Tests.csproj" Id="a6e04861-d844-4e31-bee8-1990a85b899c" />
+  <Project Path="ShkoloASPNETcore/ShkoloASPNETcore.Web.csproj" />
 </Solution>
