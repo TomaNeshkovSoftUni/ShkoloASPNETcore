@@ -23,6 +23,12 @@ namespace ShkoloASPNETcore.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<Grade>()
+                .HasOne(g => g.Subject)
+                .WithMany(s => s.Grades)
+                .HasForeignKey(g => g.SubjectId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
