@@ -4,6 +4,7 @@ using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
+using ShkoloASPNETcore.Infrastructure.Data.Models;
 
 
 namespace ShkoloASPNETcore.Infrastructure.Models

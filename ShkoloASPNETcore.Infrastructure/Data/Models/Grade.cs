@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using ShkoloASPNETcore.Infrastructure.Models.ShkoloClone.Infrastructure.Data.Models;
 
-namespace ShkoloASPNETcore.Infrastructure.Models
+namespace ShkoloASPNETcore.Infrastructure.Data.Models
 {
     public class Grade
     {

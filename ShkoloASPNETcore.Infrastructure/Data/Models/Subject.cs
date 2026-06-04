@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Text;
 
-namespace ShkoloASPNETcore.Infrastructure.Models
+namespace ShkoloASPNETcore.Infrastructure.Data.Models
 {
     public class Subject
     {

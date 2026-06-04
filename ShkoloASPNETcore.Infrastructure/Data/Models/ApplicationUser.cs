@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 
-namespace ShkoloASPNETcore.Infrastructure.Models
+namespace ShkoloASPNETcore.Infrastructure.Data.Models
 {
     public class ApplicationUser : IdentityUser
     {

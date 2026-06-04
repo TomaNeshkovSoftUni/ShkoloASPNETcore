@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ShkoloASPNETcore.Infrastructure.Models
+namespace ShkoloASPNETcore.Infrastructure.Data.Models
 {
     public class Teacher
     {
