@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
+using ShkoloASPNETcore.Services;
+using ShkoloASPNETcore.Services.Contracts.ShkoloASPNETcore.Services.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +17,12 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => {
 })
 .AddEntityFrameworkStores<ShkoloDbContext>();
 
+
 builder.Services.AddControllersWithViews();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 var app = builder.Build();
 
