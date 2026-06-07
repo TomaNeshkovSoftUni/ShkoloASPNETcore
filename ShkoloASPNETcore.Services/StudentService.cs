@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using ShkoloASPNETcore.Infrastructure.Data;
-using ShkoloASPNETcore.Infrastructure.Models.ShkoloClone.Infrastructure.Data.Models;
+using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services.Contracts.ShkoloASPNETcore.Services.Contracts;
 
 namespace ShkoloASPNETcore.Services

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-using ShkoloASPNETcore.Infrastructure.Models.ShkoloClone.Infrastructure.Data.Models;
 
 namespace ShkoloASPNETcore.Infrastructure.Data.Models
 {

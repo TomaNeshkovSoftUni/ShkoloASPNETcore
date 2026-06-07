@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ShkoloASPNETcore.Infrastructure.Data.Models.Student>
+
+@{
+    ViewData["Title"] = "Students List";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Students</h2>
+        <a class="btn btn-primary" asp-controller="Student" asp-action="Create">Add New Student</a>
+    </div>
+
+    <table class="table table-hover table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="2" class="text-center">No students found in the database.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var student in Model)
+                {
+                    <tr>
+                        <td>@student.Id</td>
+                        <td>
+                            <a class="btn btn-sm btn-warning" asp-controller="Student" asp-action="Edit" asp-route-id="@student.Id">Edit</a>
+                            <a class="btn btn-sm btn-danger" asp-controller="Student" asp-action="Delete" asp-route-id="@student.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

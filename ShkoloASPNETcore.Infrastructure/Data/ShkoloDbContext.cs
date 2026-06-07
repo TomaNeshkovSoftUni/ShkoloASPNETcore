@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
-using ShkoloASPNETcore.Infrastructure.Models.ShkoloClone.Infrastructure.Data.Models;
 
 namespace ShkoloASPNETcore.Infrastructure.Data
 {

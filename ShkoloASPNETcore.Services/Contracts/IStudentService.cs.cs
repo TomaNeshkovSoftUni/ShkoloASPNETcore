@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using global::ShkoloASPNETcore.Infrastructure.Models.ShkoloClone.Infrastructure.Data.Models;
+using ShkoloASPNETcore.Infrastructure.Data.Models;
+
 
 namespace ShkoloASPNETcore.Services.Contracts
 {

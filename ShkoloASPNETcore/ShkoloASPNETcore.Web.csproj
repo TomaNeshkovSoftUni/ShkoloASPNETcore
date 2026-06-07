@@ -23,4 +23,8 @@
     <ProjectReference Include="..\ShkoloASPNETcore.Services\ShkoloASPNETcore.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Home\" />
+  </ItemGroup>
+
 </Project>

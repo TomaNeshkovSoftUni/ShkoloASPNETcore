@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics;
-using ShkoloASPNETcore.Infrastructure.Data.Models;
 
 
-namespace ShkoloASPNETcore.Infrastructure.Models
+namespace ShkoloASPNETcore.Infrastructure.Data.Models
 {
-    namespace ShkoloClone.Infrastructure.Data.Models
-    {
         public class Student
         {
             [Key]
@@ -28,5 +24,4 @@ namespace ShkoloASPNETcore.Infrastructure.Models
 
             public ICollection<Grade> Grades { get; set; } = new List<Grade>();
         }
-    }
 }
