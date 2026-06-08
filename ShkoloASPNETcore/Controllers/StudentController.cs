@@ -19,5 +19,11 @@ namespace ShkoloASPNETcore.Web.Controllers
             var students = await _studentService.GetAllStudentsAsync();
             return View(students);
         }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
