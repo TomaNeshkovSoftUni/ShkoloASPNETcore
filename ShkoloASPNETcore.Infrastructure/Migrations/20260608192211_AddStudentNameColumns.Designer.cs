@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShkoloASPNETcore.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using ShkoloASPNETcore.Infrastructure.Data;
 namespace ShkoloASPNETcore.Infrastructure.Migrations
 {
     [DbContext(typeof(ShkoloDbContext))]
-    partial class ShkoloDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260608192211_AddStudentNameColumns")]
+    partial class AddStudentNameColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,7 +166,7 @@ namespace ShkoloASPNETcore.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "1",
+                            UserId = "f7b9c1d2-e3f4-5a6b-7c8d-9e0f1a2b3c4d",
                             RoleId = "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
                         });
                 });
@@ -266,7 +269,7 @@ namespace ShkoloASPNETcore.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1",
+                            Id = "f7b9c1d2-e3f4-5a6b-7c8d-9e0f1a2b3c4d",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "83ef07a6-8054-4638-b75d-3571d87e0dc0",
                             Email = "admin@shkolo.bg",

@@ -22,6 +22,14 @@ namespace ShkoloASPNETcore.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<ApplicationUser>().ToTable("Users");
+            builder.Entity<IdentityRole>().ToTable("Roles");
+            builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
+            builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
+            builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
+            builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
+            builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
+
             base.OnModelCreating(builder);
 
             builder.Entity<Grade>()
@@ -30,7 +38,7 @@ namespace ShkoloASPNETcore.Infrastructure.Data
                 .HasForeignKey(g => g.SubjectId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Seeding roles and admin user
+            // seeding roles and admin user
             string adminRoleId = "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d";
             string teacherRoleId = "b2c3d4e5-f67a-8b9c-0d1e-2f3a4b5c6d7e";
             string studentRoleId = "c3d4e5f6-7a8b-9c0d-1e2f-3a4b5c6d7e8f";
@@ -41,7 +49,7 @@ namespace ShkoloASPNETcore.Infrastructure.Data
                 new IdentityRole { Id = studentRoleId, Name = "Student", NormalizedName = "STUDENT", ConcurrencyStamp = "94bf82fa-2613-41fa-90e2-6cf7d8d21b7b" }
             );
 
-            string adminUserId = "f7b9c1d2-e3f4-5a6b-7c8d-9e0f1a2b3c4d";
+            string adminUserId = "1";
             var adminUser = new ApplicationUser
             {
                 Id = adminUserId,
@@ -53,15 +61,12 @@ namespace ShkoloASPNETcore.Infrastructure.Data
                 FirstName = "System",
                 LastName = "Admin",
                 PasswordHash = "AQAAAAIAAYagAAAAEG3g66dfj9Kklm88AAnvR6DqPrXmEUtYvPq7lzOpwXmRtzv6Q==",
-                
-                // Guid hashes to prevent stupid ef core errors
                 SecurityStamp = "bca6230f-b472-466d-a60d-4ef852923508",
                 ConcurrencyStamp = "83ef07a6-8054-4638-b75d-3571d87e0dc0"
             };
 
             builder.Entity<ApplicationUser>().HasData(adminUser);
 
-            // Assign admin role to admin user
             builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
             {
                 RoleId = adminRoleId,

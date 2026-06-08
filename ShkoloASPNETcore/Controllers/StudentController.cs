@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services.Contracts;
 using ShkoloASPNETcore.Services.Contracts.ShkoloASPNETcore.Services.Contracts;
@@ -22,8 +23,29 @@ namespace ShkoloASPNETcore.Web.Controllers
 
         [HttpGet]
         public IActionResult Create()
-        {
+        {   
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Student student)
+        {
+            student.EnrollmentNumber = "TEMP-123";
+
+            ModelState.Remove("Grades");
+            ModelState.Remove("ApplicationUser");
+            ModelState.Remove("ApplicationUserId");
+            ModelState.Remove("EnrollmentNumber");
+
+            if (!ModelState.IsValid)
+            {
+                return View(student);
+            }
+
+            // pass the ID to the service adn the service will find the user
+            await _studentService.AddStudentAsync(student, "1");
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

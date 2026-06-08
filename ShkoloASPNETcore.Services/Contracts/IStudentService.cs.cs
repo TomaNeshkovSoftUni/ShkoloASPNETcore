@@ -12,6 +12,7 @@ namespace ShkoloASPNETcore.Services.Contracts
         public interface IStudentService
         {
             Task<IEnumerable<Student>> GetAllStudentsAsync();
+            Task AddStudentAsync(Student student, string userId);
         }
     }
 }
