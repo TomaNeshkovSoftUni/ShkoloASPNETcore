@@ -53,6 +53,12 @@ namespace ShkoloASPNETcore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ApplicationUserId,Department")] Teacher teacher)
         {
+            teacher.ApplicationUserId = "1";
+            teacher.ApplicationUser = null;
+
+            ModelState.Remove("ApplicationUser");
+            ModelState.Remove("ApplicationUserId");
+
             if (ModelState.IsValid)
             {
                 _context.Add(teacher);
@@ -87,6 +93,9 @@ namespace ShkoloASPNETcore.Web.Controllers
             {
                 return NotFound();
             }
+
+            teacher.ApplicationUser = null;
+            ModelState.Remove("ApplicationUser");
 
             if (ModelState.IsValid)
             {

@@ -61,6 +61,9 @@ namespace ShkoloASPNETcore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Value,StudentId,SubjectId,DateIssued")] Grade grade)
         {
+            ModelState.Remove("Student");
+            ModelState.Remove("Subject");
+
             if (ModelState.IsValid)
             {
                 _context.Add(grade);
@@ -101,6 +104,9 @@ namespace ShkoloASPNETcore.Web.Controllers
             {
                 return NotFound();
             }
+
+            ModelState.Remove("Student");
+            ModelState.Remove("Subject");
 
             if (ModelState.IsValid)
             {
