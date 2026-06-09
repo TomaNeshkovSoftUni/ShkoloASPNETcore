@@ -1,8 +1,31 @@
 ﻿@{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to Shkolo</h1>
+    <hr />
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-3 card mx-2 p-3 bg-light">
+            <h5>Total Students</h5>
+            <h3 id="student-count">Loading...</h3>
+        </div>
+        <div class="col-md-3 card mx-2 p-3 bg-light">
+            <h5>Total Teachers</h5>
+            <h3 id="teacher-count">Loading...</h3>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('/api/statistics')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('student-count').innerText = data.students;
+                    document.getElementById('teacher-count').innerText = data.teachers;
+                });
+        });
+    </script>
+}
