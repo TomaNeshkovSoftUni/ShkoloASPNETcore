@@ -19,6 +19,8 @@ namespace ShkoloASPNETcore.Infrastructure.Data
         public DbSet<Teacher> Teachers { get; set; } = null!;
         public DbSet<Subject> Subjects { get; set; } = null!;
         public DbSet<Grade> Grades { get; set; } = null!;
+        public DbSet<Remark> Remarks { get; set; } = null!;
+        public DbSet<Absence> Absences { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -38,7 +40,19 @@ namespace ShkoloASPNETcore.Infrastructure.Data
                 .HasForeignKey(g => g.SubjectId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // seeding roles and admin user
+            builder.Entity<Absence>()
+                .HasOne(a => a.Subject)
+                .WithMany()
+                .HasForeignKey(a => a.SubjectId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Remark>()
+                .HasOne(r => r.Subject)
+                .WithMany()
+                .HasForeignKey(r => r.SubjectId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // seed roles and admin user
             string adminRoleId = "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d";
             string teacherRoleId = "b2c3d4e5-f67a-8b9c-0d1e-2f3a4b5c6d7e";
             string studentRoleId = "c3d4e5f6-7a8b-9c0d-1e2f-3a4b5c6d7e8f";
