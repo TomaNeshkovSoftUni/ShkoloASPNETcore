@@ -1,54 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
+using ShkoloASPNETcore.Services.Contracts;
 
 namespace ShkoloASPNETcore.Web.Controllers
 {
     public class SubjectController : Controller
     {
-        private readonly ShkoloDbContext _context;
+        private readonly ISubjectService _subjectService;
+        private readonly ITeacherService _teacherService;
 
-        public SubjectController(ShkoloDbContext context)
+        public SubjectController(ISubjectService subjectService, ITeacherService teacherService)
         {
-            _context = context;
+            _subjectService = subjectService;
+            _teacherService = teacherService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var shkoloDbContext = _context.Subjects.Include(s => s.Teacher);
-            return View(await shkoloDbContext.ToListAsync());
+            var subjects = await _subjectService.GetAllSubjectsAsync();
+            return View(subjects);
         }
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var subject = await _context.Subjects
-                .Include(s => s.Teacher)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (subject == null)
-            {
-                return NotFound();
-            }
+            var subject = await _subjectService.GetSubjectByIdAsync(id.Value);
+            if (subject == null) return NotFound();
 
             return View(subject);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "ApplicationUserId");
+            ViewData["TeacherId"] = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "ApplicationUserId");
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -56,27 +46,21 @@ namespace ShkoloASPNETcore.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(subject);
-                await _context.SaveChangesAsync();
+                await _subjectService.AddSubjectAsync(subject);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "ApplicationUserId", subject.TeacherId);
+            ViewData["TeacherId"] = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "ApplicationUserId", subject.TeacherId);
             return View(subject);
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var subject = await _context.Subjects.FindAsync(id);
-            if (subject == null)
-            {
-                return NotFound();
-            }
-            ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "ApplicationUserId", subject.TeacherId);
+            var subject = await _subjectService.GetSubjectByIdAsync(id.Value);
+            if (subject == null) return NotFound();
+
+            ViewData["TeacherId"] = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "ApplicationUserId", subject.TeacherId);
             return View(subject);
         }
 
@@ -84,21 +68,17 @@ namespace ShkoloASPNETcore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TeacherId")] Subject subject)
         {
-            if (id != subject.Id)
-            {
-                return NotFound();
-            }
+            if (id != subject.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(subject);
-                    await _context.SaveChangesAsync();
+                    await _subjectService.UpdateSubjectAsync(subject);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SubjectExists(subject.Id))
+                    if (!await _subjectService.SubjectExistsAsync(subject.Id))
                     {
                         return NotFound();
                     }
@@ -109,24 +89,16 @@ namespace ShkoloASPNETcore.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeacherId"] = new SelectList(_context.Teachers, "Id", "ApplicationUserId", subject.TeacherId);
+            ViewData["TeacherId"] = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "ApplicationUserId", subject.TeacherId);
             return View(subject);
         }
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var subject = await _context.Subjects
-                .Include(s => s.Teacher)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (subject == null)
-            {
-                return NotFound();
-            }
+            var subject = await _subjectService.GetSubjectByIdAsync(id.Value);
+            if (subject == null) return NotFound();
 
             return View(subject);
         }
@@ -135,19 +107,8 @@ namespace ShkoloASPNETcore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var subject = await _context.Subjects.FindAsync(id);
-            if (subject != null)
-            {
-                _context.Subjects.Remove(subject);
-            }
-
-            await _context.SaveChangesAsync();
+            await _subjectService.DeleteSubjectAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool SubjectExists(int id)
-        {
-            return _context.Subjects.Any(e => e.Id == id);
         }
     }
 }

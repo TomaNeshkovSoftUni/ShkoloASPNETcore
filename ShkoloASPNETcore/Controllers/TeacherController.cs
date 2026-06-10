@@ -1,53 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
+using ShkoloASPNETcore.Services.Contracts;
 
 namespace ShkoloASPNETcore.Web.Controllers
 {
     [Authorize(Roles = "Administrator")]
     public class TeacherController : Controller
     {
-        private readonly ShkoloDbContext _context;
+        private readonly ITeacherService _teacherService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TeacherController(ShkoloDbContext context)
+        public TeacherController(ITeacherService teacherService, UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            _teacherService = teacherService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            var shkoloDbContext = _context.Teachers.Include(t => t.ApplicationUser);
-            return View(await shkoloDbContext.ToListAsync());
+            var teachers = await _teacherService.GetAllTeachersAsync();
+            return View(teachers);
         }
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var teacher = await _context.Teachers
-                .Include(t => t.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (teacher == null)
-            {
-                return NotFound();
-            }
+            var teacher = await _teacherService.GetTeacherByIdAsync(id.Value);
+            if (teacher == null) return NotFound();
 
             return View(teacher);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["ApplicationUserId"] = new SelectList(await _userManager.Users.ToListAsync(), "Id", "Id");
             return View();
         }
 
@@ -63,27 +55,21 @@ namespace ShkoloASPNETcore.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(teacher);
-                await _context.SaveChangesAsync();
+                await _teacherService.AddTeacherAsync(teacher);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", teacher.ApplicationUserId);
+            ViewData["ApplicationUserId"] = new SelectList(await _userManager.Users.ToListAsync(), "Id", "Id", teacher.ApplicationUserId);
             return View(teacher);
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var teacher = await _context.Teachers.FindAsync(id);
-            if (teacher == null)
-            {
-                return NotFound();
-            }
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", teacher.ApplicationUserId);
+            var teacher = await _teacherService.GetTeacherByIdAsync(id.Value);
+            if (teacher == null) return NotFound();
+
+            ViewData["ApplicationUserId"] = new SelectList(await _userManager.Users.ToListAsync(), "Id", "Id", teacher.ApplicationUserId);
             return View(teacher);
         }
 
@@ -91,10 +77,7 @@ namespace ShkoloASPNETcore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,Department")] Teacher teacher)
         {
-            if (id != teacher.Id)
-            {
-                return NotFound();
-            }
+            if (id != teacher.Id) return NotFound();
 
             teacher.ApplicationUser = null;
             ModelState.Remove("ApplicationUser");
@@ -103,12 +86,11 @@ namespace ShkoloASPNETcore.Web.Controllers
             {
                 try
                 {
-                    _context.Update(teacher);
-                    await _context.SaveChangesAsync();
+                    await _teacherService.UpdateTeacherAsync(teacher);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TeacherExists(teacher.Id))
+                    if (!await _teacherService.TeacherExistsAsync(teacher.Id))
                     {
                         return NotFound();
                     }
@@ -119,24 +101,16 @@ namespace ShkoloASPNETcore.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", teacher.ApplicationUserId);
+            ViewData["ApplicationUserId"] = new SelectList(await _userManager.Users.ToListAsync(), "Id", "Id", teacher.ApplicationUserId);
             return View(teacher);
         }
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var teacher = await _context.Teachers
-                .Include(t => t.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (teacher == null)
-            {
-                return NotFound();
-            }
+            var teacher = await _teacherService.GetTeacherByIdAsync(id.Value);
+            if (teacher == null) return NotFound();
 
             return View(teacher);
         }
@@ -145,19 +119,8 @@ namespace ShkoloASPNETcore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var teacher = await _context.Teachers.FindAsync(id);
-            if (teacher != null)
-            {
-                _context.Teachers.Remove(teacher);
-            }
-
-            await _context.SaveChangesAsync();
+            await _teacherService.DeleteTeacherAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool TeacherExists(int id)
-        {
-            return _context.Teachers.Any(e => e.Id == id);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ShkoloASPNETcore.Infrastructure.Data;
+using ShkoloASPNETcore.Services.Contracts;
 
 namespace ShkoloASPNETcore.Web.Controllers
 {
@@ -9,18 +8,18 @@ namespace ShkoloASPNETcore.Web.Controllers
     [Route("api/statistics")]
     public class StatisticsApiController : ControllerBase
     {
-        private readonly ShkoloDbContext _context;
+        private readonly IStatisticsService _statisticsService;
 
-        public StatisticsApiController(ShkoloDbContext context)
+        public StatisticsApiController(IStatisticsService statisticsService)
         {
-            _context = context;
+            _statisticsService = statisticsService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetCounts()
         {
-            var totalStudents = await _context.Students.CountAsync();
-            var totalTeachers = await _context.Teachers.CountAsync();
+            var totalStudents = await _statisticsService.GetTotalStudentsCountAsync();
+            var totalTeachers = await _statisticsService.GetTotalTeachersCountAsync();
 
             return Ok(new { students = totalStudents, teachers = totalTeachers });
         }
