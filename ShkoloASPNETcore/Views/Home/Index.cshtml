@@ -1,102 +1,144 @@
 ﻿@{
-    ViewData["Title"] = "Начало";
+    ViewData["Title"] = "Табло";
 }
 
-<div class="container-fluid px-0">
-    <div class="w-100 text-white text-center py-2 mb-4 border border-dark rounded-0" style="background-color: #2c3e50 !important; font-weight: bold; font-size: 1.1rem;">
-        ТЕСТОВ УЧЕНИК - 11Б
-    </div>
-
-    <div class="row g-2 mb-4">
-        <div class="col-md-2 col-6">
-            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #3498db;">
-                <h3 class="mb-0 fw-bold">5.51</h3>
-                <div style="font-size: 0.9rem;">Успех</div>
-            </div>
-        </div>
-        <div class="col-md-2 col-6">
-            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #1abc9c;">
-                <h3 class="mb-0 fw-bold">102</h3>
-                <div style="font-size: 0.9rem;">Оценки</div>
-            </div>
-        </div>
-        <div class="col-md-2 col-6">
-            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #e74c3c;">
-                <h3 class="mb-0 fw-bold">168.50</h3>
-                <div style="font-size: 0.9rem;">Отсъствия</div>
-            </div>
-        </div>
-        <div class="col-md-2 col-6">
-            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #f1c40f;">
-                <h3 class="mb-0 fw-bold">27</h3>
-                <div style="font-size: 0.9rem;">Отзива</div>
-            </div>
-        </div>
-        <div class="col-md-2 col-6">
-            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #9b59b6;">
-                <h3 class="mb-0 fw-bold">27</h3>
-                <div style="font-size: 0.9rem;">Контролни</div>
-            </div>
-        </div>
-        <div class="col-md-2 col-6">
-            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #2ecc71;">
-                <h3 class="mb-0 fw-bold">0</h3>
-                <div style="font-size: 0.9rem;">Родителски</div>
-            </div>
+<div class="card border-0 rounded-0 shadow-sm mb-4" style="background-color: #3ba1da; color: white;">
+    <div class="card-body p-3 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-mortarboard-fill fs-3"></i>
+            <h5 class="m-0 fw-bold text-uppercase" style="font-size: 15px; letter-spacing: 0.5px;">ТОМА Н. НЕШКОВ - 11Б</h5>
         </div>
     </div>
+</div>
 
-    <div class="row g-3">
-        <div class="col-md-6">
-            <div class="bg-white border border-dark rounded-0 p-3">
-                <h5 class="border-bottom border-dark pb-2 mb-3 fw-bold text-dark" style="font-size: 1rem;">
-                    КЛАСАЦИЯ
-                </h5>
-                <div class="row text-center my-2">
-                    <div class="col border-end border-dark">
-                        <h4 class="fw-bold mb-0">5 —</h4>
-                        <span class="text-muted d-block" style="font-size: 0.7rem; font-weight: bold;">МЯСТО В ПАРАЛЕЛКАТА</span>
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card border-0 rounded-0 text-white p-3 h-100 shadow-sm" style="background-color: #3ba1da;">
+            <div class="d-flex justify-content-between align-items-start">
+                <h2 class="fw-bold m-0" style="font-size: 28px;">5.51</h2>
+                <i class="bi bi-graph-up fs-4 opacity-50"></i>
+            </div>
+            <div class="small text-uppercase opacity-75 mt-2" style="font-size: 11px; font-weight: 600;">Успех</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card border-0 rounded-0 text-white p-3 h-100 shadow-sm" style="background-color: #4cbca5;">
+            <div class="d-flex justify-content-between align-items-start">
+                <h2 class="fw-bold m-0" id="students-stat" style="font-size: 28px;">...</h2>
+                <i class="bi bi-pencil-fill fs-4 opacity-50"></i>
+            </div>
+            <div class="small text-uppercase opacity-75 mt-2" style="font-size: 11px; font-weight: 600;">Оценки (Ученици)</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card border-0 rounded-0 text-white p-3 h-100 shadow-sm" style="background-color: #e25353;">
+            <div class="d-flex justify-content-between align-items-start">
+                <h2 class="fw-bold m-0" style="font-size: 28px;">168.50</h2>
+                <i class="bi bi-exclamation-circle-fill fs-4 opacity-50"></i>
+            </div>
+            <div class="small text-uppercase opacity-75 mt-2" style="font-size: 11px; font-weight: 600;">Отсъствия</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card border-0 rounded-0 text-white p-3 h-100 shadow-sm" style="background-color: #dfb840;">
+            <div class="d-flex justify-content-between align-items-start">
+                <h2 class="fw-bold m-0" id="teachers-stat" style="font-size: 28px;">...</h2>
+                <i class="bi bi-award-fill fs-4 opacity-50"></i>
+            </div>
+            <div class="small text-uppercase opacity-75 mt-2" style="font-size: 11px; font-weight: 600;">Отзиви (Учители)</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card border-0 rounded-0 text-white p-3 h-100 shadow-sm" style="background-color: #8e44ad;">
+            <div class="d-flex justify-content-between align-items-start">
+                <h2 class="fw-bold m-0" style="font-size: 28px;">27</h2>
+                <i class="bi bi-file-earmark-text-fill fs-4 opacity-50"></i>
+            </div>
+            <div class="small text-uppercase opacity-75 mt-2" style="font-size: 11px; font-weight: 600;">Контролни</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card border-0 rounded-0 text-white p-3 h-100 shadow-sm" style="background-color: #2ecc71;">
+            <div class="d-flex justify-content-between align-items-start">
+                <h2 class="fw-bold m-0" style="font-size: 28px;">0</h2>
+                <i class="bi bi-people-fill fs-4 opacity-50"></i>
+            </div>
+            <div class="small text-uppercase opacity-75 mt-2" style="font-size: 11px; font-weight: 600;">Родителски</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card border-0 rounded-0 shadow-sm h-100 bg-white">
+            <div class="card-header bg-white border-bottom p-3">
+                <h6 class="m-0 fw-bold text-secondary text-uppercase" style="font-size: 12px; letter-spacing: 0.5px;"><i class="bi bi-trophy-fill me-2"></i> Класация</h6>
+            </div>
+            <div class="card-body p-4 d-flex align-items-center justify-content-around text-center">
+                <div>
+                    <h1 class="display-4 fw-bold text-dark m-0">5 <span style="font-size: 20px; color: #999;">—</span></h1>
+                    <small class="text-uppercase text-muted d-block mt-2" style="font-size: 10px; font-weight:600;">Място в паралелката</small>
+                </div>
+                <div>
+                    <h1 class="display-4 fw-bold text-dark m-0">36 <span style="font-size: 20px; color: #999;">—</span></h1>
+                    <small class="text-uppercase text-muted d-block mt-2" style="font-size: 10px; font-weight:600;">Място във випуска</small>
+                </div>
+                <div>
+                    <h1 class="display-4 fw-bold text-dark m-0">150 <span style="font-size: 20px; color: #999;">—</span></h1>
+                    <small class="text-uppercase text-muted d-block mt-2" style="font-size: 10px; font-weight:600;">Място в училище</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-0 rounded-0 shadow-sm h-100 bg-white">
+            <div class="card-header bg-white border-bottom p-3">
+                <h6 class="m-0 fw-bold text-secondary text-uppercase" style="font-size: 12px; letter-spacing: 0.5px;"><i class="bi bi-bar-chart-fill me-2"></i> Най-висок успех</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small fw-bold mb-1">
+                        <span>Производствена практика - СПП</span>
+                        <span class="text-primary">6.00</span>
                     </div>
-                    <div class="col border-end border-dark">
-                        <h4 class="fw-bold mb-0">36 —</h4>
-                        <span class="text-muted d-block" style="font-size: 0.7rem; font-weight: bold;">МЯСТО ВЪВ ВИПУСКА</span>
+                    <div class="progress rounded-0" style="height: 12px;">
+                        <div class="progress-bar" style="width: 100%; background-color: #3ba1da;"></div>
                     </div>
-                    <div class="col">
-                        <h4 class="fw-bold mb-0">150 —</h4>
-                        <span class="text-muted d-block" style="font-size: 0.7rem; font-weight: bold;">МЯСТО В УЧИЛИЩЕ</span>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small fw-bold mb-1">
+                        <span>Бази данни - учебна практика</span>
+                        <span class="text-dark">6.00</span>
+                    </div>
+                    <div class="progress rounded-0" style="height: 12px;">
+                        <div class="progress-bar bg-dark" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between small fw-bold mb-1">
+                        <span>Операционни системи - учебна практика</span>
+                        <span class="text-success">6.00</span>
+                    </div>
+                    <div class="progress rounded-0" style="height: 12px;">
+                        <div class="progress-bar style" style="width: 100%; background-color: #2ecc71;"></div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-6">
-            <div class="bg-white border border-dark rounded-0 p-3">
-                <h5 class="border-bottom border-dark pb-2 mb-3 fw-bold text-dark" style="font-size: 1rem;">
-                    НАЙ-ВИСОК УСПЕХ
-                </h5>
-                <table class="table table-bordered table-striped sm mb-0 rounded-0">
-                    <thead>
-                        <tr class="table-light">
-                            <th>Предмет</th>
-                            <th style="width: 80px; text-align: center;">Успех</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Производствена практика</td>
-                            <td style="text-align: center;"><span class="badge bg-primary rounded-0" style="font-size: 0.85rem;">6.00</span></td>
-                        </tr>
-                        <tr>
-                            <td>Бази данни</td>
-                            <td style="text-align: center;"><span class="badge bg-primary rounded-0" style="font-size: 0.85rem;">6.00</span></td>
-                        </tr>
-                        <tr>
-                            <td>Операционни системи</td>
-                            <td style="text-align: center;"><span class="badge bg-primary rounded-0" style="font-size: 0.85rem;">6.00</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch('/api/statistics')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('students-stat').textContent = data.students;
+                document.getElementById('teachers-stat').textContent = data.teachers;
+            })
+            .catch(() => {
+                document.getElementById('students-stat').textContent = "0";
+                document.getElementById('teachers-stat').textContent = "0";
+            });
+    });
+</script>
