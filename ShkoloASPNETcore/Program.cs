@@ -3,6 +3,7 @@ using ShkoloASPNETcore.Core.Services.Contracts;
 using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services;
+using ShkoloASPNETcore.Services.Contracts;
 using ShkoloASPNETcore.Services.Contracts.ShkoloASPNETcore.Services.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IAbsenceService, AbsenceService>();
+builder.Services.AddScoped<IRemarkService, RemarkService>();
 
 var app = builder.Build();
 
