@@ -1,10 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services.Contracts;
 
 namespace ShkoloASPNETcore.Web.Controllers
 {
+    [Authorize]
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
@@ -27,9 +31,10 @@ namespace ShkoloASPNETcore.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Student student)
         {
-            student.EnrollmentNumber = "TEMP-123";
+            student.EnrollmentNumber = "УЧ-" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
 
             ModelState.Remove("Grades");
             ModelState.Remove("ApplicationUser");
@@ -41,8 +46,9 @@ namespace ShkoloASPNETcore.Web.Controllers
                 return View(student);
             }
 
-            await _studentService.AddStudentAsync(student, "1");
-            TempData["SuccessMessage"] = "Student added successfully!";
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _studentService.AddStudentAsync(student, currentUserId);
+            TempData["SuccessMessage"] = "Ученикът е добавен успешно!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -69,7 +75,7 @@ namespace ShkoloASPNETcore.Web.Controllers
             if (ModelState.IsValid)
             {
                 await _studentService.UpdateStudentAsync(student);
-                TempData["SuccessMessage"] = "Student updated successfully!";
+                TempData["SuccessMessage"] = "Данните на ученика бяха обновени успешно!";
                 return RedirectToAction(nameof(Index));
             }
             return View(student);
@@ -91,7 +97,7 @@ namespace ShkoloASPNETcore.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _studentService.DeleteStudentAsync(id);
-            TempData["SuccessMessage"] = "Student deleted successfully!";
+            TempData["SuccessMessage"] = "Ученикът беше изтрит успешно!";
             return RedirectToAction(nameof(Index));
         }
     }

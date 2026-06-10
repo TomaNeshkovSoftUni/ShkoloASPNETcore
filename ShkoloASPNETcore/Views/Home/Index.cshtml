@@ -133,9 +133,9 @@
         fetch('/api/statistics')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('students-stat').textContent = data.students;
-                document.getElementById('teachers-stat').textContent = data.teachers;
-            })
+                document.getElementById('total-students').innerText = data.students;
+                document.getElementById('total-teachers').innerText = data.teachers;
+            });
             .catch(() => {
                 document.getElementById('students-stat').textContent = "0";
                 document.getElementById('teachers-stat').textContent = "0";

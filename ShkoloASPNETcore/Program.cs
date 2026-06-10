@@ -18,11 +18,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => {
 })
 .AddEntityFrameworkStores<ShkoloDbContext>();
 
-
 builder.Services.AddControllersWithViews();
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IAbsenceService, AbsenceService>();
 builder.Services.AddScoped<IRemarkService, RemarkService>();
@@ -41,17 +39,17 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseStatusCodePagesWithReExecute("/Errors/Error{0}");
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
-app.UseAuthorization();     
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseAuthorization();
 
 app.MapStaticAssets();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
