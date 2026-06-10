@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services.Contracts;
-using ShkoloASPNETcore.Services.Contracts.ShkoloASPNETcore.Services.Contracts;
 
 namespace ShkoloASPNETcore.Services
 {
@@ -25,15 +23,30 @@ namespace ShkoloASPNETcore.Services
 
         public async Task AddStudentAsync(Student student, string userId)
         {
-            // temp explicit fk value
             student.ApplicationUserId = userId;
-
-            // this stops EF from trying to update the ApplicationUser object itself
-            student.ApplicationUser = null;
-
             await _context.Students.AddAsync(student);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Student?> GetStudentByIdAsync(int id)
+        {
+            return await _context.Students.FindAsync(id);
+        }
+
+        public async Task UpdateStudentAsync(Student student)
+        {
+            _context.Students.Update(student);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteStudentAsync(int id)
+        {
+            var student = await _context.Students.FindAsync(id);
+            if (student != null)
+            {
+                _context.Students.Remove(student);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
-

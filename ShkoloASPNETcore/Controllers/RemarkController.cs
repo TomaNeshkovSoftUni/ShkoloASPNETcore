@@ -1,9 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services.Contracts;
 
@@ -12,12 +9,17 @@ namespace ShkoloASPNETcore.Web.Controllers
     public class RemarkController : Controller
     {
         private readonly IRemarkService _remarkService;
-        private readonly ShkoloDbContext _context;
+        private readonly IStudentService _studentService;
+        private readonly ISubjectService _subjectService;
 
-        public RemarkController(IRemarkService remarkService, ShkoloDbContext context)
+        public RemarkController(
+            IRemarkService remarkService,
+            IStudentService studentService,
+            ISubjectService subjectService)
         {
             _remarkService = remarkService;
-            _context = context;
+            _studentService = studentService;
+            _subjectService = subjectService;
         }
 
         public async Task<IActionResult> Index()
@@ -29,8 +31,8 @@ namespace ShkoloASPNETcore.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Students = new SelectList(await _context.Students.ToListAsync(), "Id", "Id");
-            ViewBag.Subjects = new SelectList(await _context.Subjects.ToListAsync(), "Id", "Name");
+            ViewBag.Students = new SelectList(await _studentService.GetAllStudentsAsync(), "Id", "Id");
+            ViewBag.Subjects = new SelectList(await _subjectService.GetAllSubjectsAsync(), "Id", "Name");
             return View();
         }
 
@@ -48,8 +50,8 @@ namespace ShkoloASPNETcore.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Students = new SelectList(await _context.Students.ToListAsync(), "Id", "Id", remark.StudentId);
-            ViewBag.Subjects = new SelectList(await _context.Subjects.ToListAsync(), "Id", "Name", remark.SubjectId);
+            ViewBag.Students = new SelectList(await _studentService.GetAllStudentsAsync(), "Id", "Id", remark.StudentId);
+            ViewBag.Subjects = new SelectList(await _subjectService.GetAllSubjectsAsync(), "Id", "Name", remark.SubjectId);
             return View(remark);
         }
     }
