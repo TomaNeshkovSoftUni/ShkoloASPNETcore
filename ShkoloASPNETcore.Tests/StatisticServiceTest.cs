@@ -21,7 +21,7 @@ namespace ShkoloASPNETcore.Tests
         public async Task GetTotalStudentsCountAsync_ShouldReturnCorrectCount()
         {
             var studentUser = new ApplicationUser { Id = "stat-s", UserName = "stat@s.bg", Email = "stat@s.bg", FirstName = "У", LastName = "У" };
-            var student = new Student { FirstName = "Тест", LastName = "Ученик", EnrollmentNumber = "УЧ-STAT", ApplicationUserId = "stat-s" };
+            var student = new Student { FirstName = "Тест", LastName = "Ученик", ApplicationUserId = "stat-s" };
             Context.Users.Add(studentUser);
             Context.Students.Add(student);
             await Context.SaveChangesAsync();

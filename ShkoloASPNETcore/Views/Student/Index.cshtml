@@ -1,41 +1,35 @@
 ﻿@model IEnumerable<ShkoloASPNETcore.Infrastructure.Data.Models.Student>
-
 @{
-    ViewData["Title"] = "Students List";
+    ViewData["Title"] = "Ученици";
 }
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Students</h2>
-        <a class="btn btn-primary" asp-controller="Student" asp-action="Create">Add New Student</a>
+    <div class="border-bottom border-dark pb-2 mb-3">
+        <h2 class="m-0 text-uppercase fw-bold">Списък на Учениците</h2>
     </div>
 
-    <table class="table table-hover table-bordered table-striped">
-        <thead class="table-dark">
+    <table class="table table-bordered table-striped">
+        <thead>
             <tr>
-                <th>ID</th>
-                <th>Actions</th>
+                <th>ИМЕ</th>
+                <th>ФАМИЛИЯ</th>
+                <th>ID В СИСТЕМАТА</th>
             </tr>
         </thead>
         <tbody>
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="2" class="text-center">No students found in the database.</td>
+                    <td colspan="3" class="text-center p-3">Няма регистрирани ученици в системата.</td>
                 </tr>
             }
-            else
+            @foreach (var item in Model)
             {
-                @foreach (var student in Model)
-                {
-                    <tr>
-                        <td>@student.Id</td>
-                        <td>
-                            <a class="btn btn-sm btn-warning" asp-controller="Student" asp-action="Edit" asp-route-id="@student.Id">Edit</a>
-                            <a class="btn btn-sm btn-danger" asp-controller="Student" asp-action="Delete" asp-route-id="@student.Id">Delete</a>
-                        </td>
-                    </tr>
-                }
+                <tr>
+                    <td class="fw-bold text-dark">@item.FirstName</td>
+                    <td class="fw-bold text-dark">@item.LastName</td>
+                    <td>@item.Id</td>
+                </tr>
             }
         </tbody>
     </table>

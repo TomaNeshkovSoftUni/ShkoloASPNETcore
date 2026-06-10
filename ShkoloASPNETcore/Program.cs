@@ -4,6 +4,7 @@ using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services;
 using ShkoloASPNETcore.Services.Contracts;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<ShkoloDbContext>(options =>
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => {
     options.SignIn.RequireConfirmedAccount = false;
 })
+.AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ShkoloDbContext>();
 
 builder.Services.AddControllersWithViews();
@@ -56,4 +58,9 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
+var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<ShkoloASPNETcore.Infrastructure.Data.Models.ApplicationUser>();
+var myNewHash = hasher.HashPassword(new ShkoloASPNETcore.Infrastructure.Data.Models.ApplicationUser(), "Admin123!");
+Console.WriteLine($"{myNewHash}");
+
 app.Run();
+

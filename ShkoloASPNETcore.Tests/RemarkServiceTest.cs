@@ -34,7 +34,7 @@ namespace ShkoloASPNETcore.Tests
             var teacherUser = new ApplicationUser { Id = "t-rem", UserName = "t@rem.bg", Email = "t@rem.bg", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
             Context.Users.AddRange(studentUser, teacherUser);
 
-            var student = new Student { FirstName = "Николай", LastName = "Колев", EnrollmentNumber = "УЧ-777", ApplicationUserId = "s-rem" };
+            var student = new Student { FirstName = "Николай", LastName = "Колев", ApplicationUserId = "s-rem" };
             var teacher = new Teacher { FirstName = "Иван", LastName = "Петров", Department = "История", ApplicationUserId = "t-rem" };
             Context.Students.Add(student);
             Context.Teachers.Add(teacher);
@@ -47,20 +47,13 @@ namespace ShkoloASPNETcore.Tests
             var remark = new Remark
             {
                 Text = "Стабилно поведение в час.",
-                Type = RemarkType.Забележка, 
+                Type = RemarkType.Забележка,
                 StudentId = student.Id,
                 SubjectId = subject.Id,
                 DateIssued = DateTime.Now
             };
 
             await _remarkService.AddRemarkAsync(remark);
-
-            var remarksFromContext = Context.Remarks.ToList();
-            if (remarksFromContext.Count == 0)
-            {
-                Context.Remarks.Add(remark);
-                await Context.SaveChangesAsync();
-            }
 
             var remarks = (await _remarkService.GetAllRemarksAsync()).ToList();
 

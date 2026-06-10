@@ -1,105 +1,124 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
-using ShkoloASPNETcore.Services.Contracts;
 
 namespace ShkoloASPNETcore.Web.Controllers
 {
+    [Authorize(Roles = "Administrator,Teacher")]
     public class SubjectController : Controller
     {
-        private readonly ISubjectService _subjectService;
-        private readonly ITeacherService _teacherService;
+        private readonly ShkoloDbContext _context;
 
-        public SubjectController(ISubjectService subjectService, ITeacherService teacherService)
+        public SubjectController(ShkoloDbContext context)
         {
-            _subjectService = subjectService;
-            _teacherService = teacherService;
+            _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            var subjects = await _subjectService.GetAllSubjectsAsync();
-            return View(subjects);
+            return View(await _context.Subjects.ToListAsync());
         }
 
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet]
+        public IActionResult Create()
         {
-            if (id == null) return NotFound();
-
-            var subject = await _subjectService.GetSubjectByIdAsync(id.Value);
-            if (subject == null) return NotFound();
-
-            return View(subject);
-        }
-
-        public async Task<IActionResult> Create()
-        {
-            ViewData["TeacherId"] = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "ApplicationUserId");
-            return View();
+            return View(new Subject());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,TeacherId")] Subject subject)
+        public async Task<IActionResult> Create(Subject subject)
         {
+            ModelState.Remove("TeacherId");
+            ModelState.Remove("Teacher");
+
             if (ModelState.IsValid)
             {
-                await _subjectService.AddSubjectAsync(subject);
+                var anyTeacher = await _context.Teachers.FirstOrDefaultAsync();
+
+                if (anyTeacher == null)
+                {
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    anyTeacher = new Teacher
+                    {
+                        FirstName = "Служебен",
+                        LastName = "Профил",
+                        Department = "Администрация",
+                        ApplicationUserId = userId
+                    };
+                    _context.Teachers.Add(anyTeacher);
+                    await _context.SaveChangesAsync();
+                }
+
+                subject.TeacherId = anyTeacher.Id;
+
+                _context.Subjects.Add(subject);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Предметът е добавен успешно!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeacherId"] = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "ApplicationUserId", subject.TeacherId);
+
             return View(subject);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
-
-            var subject = await _subjectService.GetSubjectByIdAsync(id.Value);
+            var subject = await _context.Subjects.FindAsync(id);
             if (subject == null) return NotFound();
-
-            ViewData["TeacherId"] = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "ApplicationUserId", subject.TeacherId);
             return View(subject);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TeacherId")] Subject subject)
+        public async Task<IActionResult> Edit(int id, Subject subject)
         {
             if (id != subject.Id) return NotFound();
 
+            ModelState.Remove("TeacherId");
+            ModelState.Remove("Teacher");
+
             if (ModelState.IsValid)
             {
-                try
+                var anyTeacher = await _context.Teachers.FirstOrDefaultAsync();
+
+                if (anyTeacher == null)
                 {
-                    await _subjectService.UpdateSubjectAsync(subject);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!await _subjectService.SubjectExistsAsync(subject.Id))
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    anyTeacher = new Teacher
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                        FirstName = "Служебен",
+                        LastName = "Профил",
+                        Department = "Администрация",
+                        ApplicationUserId = userId
+                    };
+                    _context.Teachers.Add(anyTeacher);
+                    await _context.SaveChangesAsync();
                 }
+
+                subject.TeacherId = anyTeacher.Id;
+
+                _context.Update(subject);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Предметът е коригиран успешно!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TeacherId"] = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "ApplicationUserId", subject.TeacherId);
             return View(subject);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
-
-            var subject = await _subjectService.GetSubjectByIdAsync(id.Value);
+            var subject = await _context.Subjects.FindAsync(id);
             if (subject == null) return NotFound();
-
             return View(subject);
         }
 
@@ -107,7 +126,13 @@ namespace ShkoloASPNETcore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _subjectService.DeleteSubjectAsync(id);
+            var subject = await _context.Subjects.FindAsync(id);
+            if (subject != null)
+            {
+                _context.Subjects.Remove(subject);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Предметът е изтрит успешно!";
+            }
             return RedirectToAction(nameof(Index));
         }
     }

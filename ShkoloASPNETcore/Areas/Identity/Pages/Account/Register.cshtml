@@ -1,0 +1,47 @@
+﻿@page
+@model RegisterModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head><title>Регистрация</title></head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding-top: 5vh;">
+    <div style="background: white; border: 2px solid black; width: 400px; padding: 30px; margin: 0 auto;">
+        <h2 style="text-transform: uppercase; border-bottom: 2px solid black; padding-bottom: 10px; margin-top:0;">Регистрация</h2>
+        
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" style="color: red; font-weight: bold;"></div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold;">Имейл</label><br/>
+                <input asp-for="Input.Email" style="width: 100%; border: 1px solid black; padding: 8px; box-sizing: border-box;" />
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold;">Име</label><br/>
+                <input asp-for="Input.FirstName" style="width: 100%; border: 1px solid black; padding: 8px; box-sizing: border-box;" />
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold;">Фамилия</label><br/>
+                <input asp-for="Input.LastName" style="width: 100%; border: 1px solid black; padding: 8px; box-sizing: border-box;" />
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold;">Парола</label><br/>
+                <input asp-for="Input.Password" style="width: 100%; border: 1px solid black; padding: 8px; box-sizing: border-box;" />
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <label style="font-weight: bold;">Потвърди Парола</label><br/>
+                <input asp-for="Input.ConfirmPassword" style="width: 100%; border: 1px solid black; padding: 8px; box-sizing: border-box;" />
+            </div>
+            
+            <button type="submit" style="background: black; color: white; border: 2px solid black; padding: 10px; width: 100%; font-weight: bold; cursor: pointer;">РЕГИСТРИРАЙ СЕ</button>
+        </form>
+        
+        <div style="margin-top: 15px; text-align: center;">
+            <a href="./Login" style="color: black; font-weight: bold; text-decoration: none; border-bottom: 1px solid black;">Вече имаш профил? Вход</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -16,6 +16,9 @@ namespace ShkoloASPNETcore.Infrastructure.Data.Models
         public decimal Value { get; set; }
 
         [Required]
+        public string? Issuer { get; set; }
+
+        [Required]
         public int StudentId { get; set; }
 
         [ForeignKey(nameof(StudentId))]

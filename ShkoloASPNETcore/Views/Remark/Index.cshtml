@@ -1,49 +1,46 @@
 ﻿@model IEnumerable<ShkoloASPNETcore.Infrastructure.Data.Models.Remark>
-
 @{
-    ViewData["Title"] = "Дневник на класа - Забележки";
+    ViewData["Title"] = "Забележки";
 }
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="bi bi-journal-text text-primary"></i> Забележки и Похвали</h2>
-        <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Добави запис</a>
+    <div class="d-flex justify-content-between align-items-end mb-3 border-bottom border-dark pb-2">
+        <h2 class="m-0 text-uppercase fw-bold">Забележки и Похвали</h2>
+        @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
+        {
+            <a asp-action="Create" class="btn btn-dark">ДОБАВИ ЗАБЕЛЕЖКА</a>
+        }
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body p-0">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Ученик ID</th>
-                        <th>Предмет</th>
-                        <th>Тип</th>
-                        <th>Съдържание</th>
-                        <th>Дата</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@item.StudentId</td>
-                            <td>@item.Subject.Name</td>
-                            <td>
-                                @if (item.Type == ShkoloASPNETcore.Infrastructure.Data.Enums.RemarkType.Похвала)
-                                {
-                                    <span class="badge bg-success">@item.Type</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger">@item.Type</span>
-                                }
-                            </td>
-                            <td>@item.Text</td>
-                            <td>@item.DateIssued.ToString("dd.MM.yyyy HH:mm")</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>УЧЕНИК</th>
+                <th>ПРЕДМЕТ</th>
+                <th>УЧИТЕЛ</th>
+                <th>СЪДЪРЖАНИЕ</th>
+                <th>ТИП</th>
+                <th>ДАТА</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="6" class="text-center p-3">Няма намерени забележки или похвали.</td>
+                </tr>
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Student?.FirstName @item.Student?.LastName</td>
+                    <td>@item.Subject?.Name</td>
+                    <td>@item.Subject?.Teacher?.FirstName @item.Subject?.Teacher?.LastName</td>
+                    <td>@item.Text</td>
+                    <td>@item.Type.ToString()</td>
+                    <td>@item.DateIssued.ToString("dd.MM.yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

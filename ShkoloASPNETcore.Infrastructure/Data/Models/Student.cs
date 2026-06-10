@@ -25,11 +25,6 @@ namespace ShkoloASPNETcore.Infrastructure.Data.Models
 
         [ForeignKey(nameof(ApplicationUserId))]
         public ApplicationUser ApplicationUser { get; set; } = null!;
-
-        [Required]
-        [MaxLength(20)]
-        public string EnrollmentNumber { get; set; } = null!;
-
         public ICollection<Grade> Grades { get; set; } = new List<Grade>();
     }
 }

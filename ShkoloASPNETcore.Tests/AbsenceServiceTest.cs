@@ -34,7 +34,7 @@ namespace ShkoloASPNETcore.Tests
             var teacherUser = new ApplicationUser { Id = "t-abs", UserName = "t@abs.bg", Email = "t@abs.bg", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
             Context.Users.AddRange(studentUser, teacherUser);
 
-            var student = new Student { FirstName = "Петър", LastName = "Георгиев", EnrollmentNumber = "УЧ-999", ApplicationUserId = "s-abs" };
+            var student = new Student { FirstName = "Петър", LastName = "Георгиев", ApplicationUserId = "s-abs" };
             var teacher = new Teacher { FirstName = "Иван", LastName = "Петров", Department = "Математика", ApplicationUserId = "t-abs" };
             Context.Students.Add(student);
             Context.Teachers.Add(teacher);

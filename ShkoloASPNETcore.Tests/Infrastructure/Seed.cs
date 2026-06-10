@@ -10,7 +10,6 @@ internal static class Seed
         {
             FirstName = "Тест",
             LastName = "Ученик",
-            EnrollmentNumber = enrollment,
             ApplicationUserId = uid
         };
 

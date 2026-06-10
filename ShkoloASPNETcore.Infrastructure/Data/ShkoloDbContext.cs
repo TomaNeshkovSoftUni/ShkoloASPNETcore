@@ -74,7 +74,7 @@ namespace ShkoloASPNETcore.Infrastructure.Data
                 EmailConfirmed = true,
                 FirstName = "System",
                 LastName = "Admin",
-                PasswordHash = "AQAAAAIAAYagAAAAEG3g66dfj9Kklm88AAnvR6DqPrXmEUtYvPq7lzOpwXmRtzv6Q==",
+                PasswordHash = "AQAAAAIAAYagAAAAEDk9jaudQb0s8hcrnK2b0JiryTLI0jgsIM+oUdJADPpYawsE+JrrRQwaIAHFCSUszQ==",
                 SecurityStamp = "bca6230f-b472-466d-a60d-4ef852923508",
                 ConcurrencyStamp = "83ef07a6-8054-4638-b75d-3571d87e0dc0"
             };

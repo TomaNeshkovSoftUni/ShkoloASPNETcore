@@ -33,7 +33,7 @@ namespace ShkoloASPNETcore.Tests
             var teacherUser = new ApplicationUser { Id = "t1", UserName = "t1", Email = "t1", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
             Context.Users.AddRange(studentUser, teacherUser);
 
-            var student = new Student { FirstName = "Иван", LastName = "Иванов", EnrollmentNumber = "УЧ-111", ApplicationUserId = "s1" };
+            var student = new Student { FirstName = "Иван", LastName = "Иванов", ApplicationUserId = "s1" };
             var teacher = new Teacher { FirstName = "Петър", LastName = "Петров", Department = "БЕЛ", ApplicationUserId = "t1" };
             Context.Students.Add(student);
             Context.Teachers.Add(teacher);
@@ -53,13 +53,6 @@ namespace ShkoloASPNETcore.Tests
 
             await _gradeService.AddGradeAsync(grade);
 
-            var gradesFromContext = Context.Grades.ToList();
-            if (gradesFromContext.Count == 0)
-            {
-                Context.Grades.Add(grade);
-                await Context.SaveChangesAsync();
-            }
-
             var grades = (await _gradeService.GetAllGradesAsync()).ToList();
 
             Assert.That(grades.Count, Is.EqualTo(1));
@@ -73,7 +66,7 @@ namespace ShkoloASPNETcore.Tests
             var teacherUser = new ApplicationUser { Id = "t2", UserName = "t2", Email = "t2", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
             Context.Users.AddRange(studentUser, teacherUser);
 
-            var student = new Student { FirstName = "Георги", LastName = "Георгиев", EnrollmentNumber = "УЧ-222", ApplicationUserId = "s2" };
+            var student = new Student { FirstName = "Георги", LastName = "Георгиев", ApplicationUserId = "s2" };
             var teacher = new Teacher { FirstName = "Ангел", LastName = "Ангелов", Department = "ИТ", ApplicationUserId = "t2" };
             Context.Students.Add(student);
             Context.Teachers.Add(teacher);
