@@ -1,31 +1,102 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Начало";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Shkolo</h1>
-    <hr />
-    <div class="row justify-content-center mt-4">
-        <div class="col-md-3 card mx-2 p-3 bg-light">
-            <h5>Total Students</h5>
-            <h3 id="student-count">Loading...</h3>
+<div class="container-fluid px-0">
+    <div class="w-100 text-white text-center py-2 mb-4 border border-dark rounded-0" style="background-color: #2c3e50 !important; font-weight: bold; font-size: 1.1rem;">
+        ТЕСТОВ УЧЕНИК - 11Б
+    </div>
+
+    <div class="row g-2 mb-4">
+        <div class="col-md-2 col-6">
+            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #3498db;">
+                <h3 class="mb-0 fw-bold">5.51</h3>
+                <div style="font-size: 0.9rem;">Успех</div>
+            </div>
         </div>
-        <div class="col-md-3 card mx-2 p-3 bg-light">
-            <h5>Total Teachers</h5>
-            <h3 id="teacher-count">Loading...</h3>
+        <div class="col-md-2 col-6">
+            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #1abc9c;">
+                <h3 class="mb-0 fw-bold">102</h3>
+                <div style="font-size: 0.9rem;">Оценки</div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #e74c3c;">
+                <h3 class="mb-0 fw-bold">168.50</h3>
+                <div style="font-size: 0.9rem;">Отсъствия</div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #f1c40f;">
+                <h3 class="mb-0 fw-bold">27</h3>
+                <div style="font-size: 0.9rem;">Отзива</div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #9b59b6;">
+                <h3 class="mb-0 fw-bold">27</h3>
+                <div style="font-size: 0.9rem;">Контролни</div>
+            </div>
+        </div>
+        <div class="col-md-2 col-6">
+            <div class="p-3 text-white rounded-0 border border-dark" style="background-color: #2ecc71;">
+                <h3 class="mb-0 fw-bold">0</h3>
+                <div style="font-size: 0.9rem;">Родителски</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="bg-white border border-dark rounded-0 p-3">
+                <h5 class="border-bottom border-dark pb-2 mb-3 fw-bold text-dark" style="font-size: 1rem;">
+                    КЛАСАЦИЯ
+                </h5>
+                <div class="row text-center my-2">
+                    <div class="col border-end border-dark">
+                        <h4 class="fw-bold mb-0">5 —</h4>
+                        <span class="text-muted d-block" style="font-size: 0.7rem; font-weight: bold;">МЯСТО В ПАРАЛЕЛКАТА</span>
+                    </div>
+                    <div class="col border-end border-dark">
+                        <h4 class="fw-bold mb-0">36 —</h4>
+                        <span class="text-muted d-block" style="font-size: 0.7rem; font-weight: bold;">МЯСТО ВЪВ ВИПУСКА</span>
+                    </div>
+                    <div class="col">
+                        <h4 class="fw-bold mb-0">150 —</h4>
+                        <span class="text-muted d-block" style="font-size: 0.7rem; font-weight: bold;">МЯСТО В УЧИЛИЩЕ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="bg-white border border-dark rounded-0 p-3">
+                <h5 class="border-bottom border-dark pb-2 mb-3 fw-bold text-dark" style="font-size: 1rem;">
+                    НАЙ-ВИСОК УСПЕХ
+                </h5>
+                <table class="table table-bordered table-striped sm mb-0 rounded-0">
+                    <thead>
+                        <tr class="table-light">
+                            <th>Предмет</th>
+                            <th style="width: 80px; text-align: center;">Успех</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Производствена практика</td>
+                            <td style="text-align: center;"><span class="badge bg-primary rounded-0" style="font-size: 0.85rem;">6.00</span></td>
+                        </tr>
+                        <tr>
+                            <td>Бази данни</td>
+                            <td style="text-align: center;"><span class="badge bg-primary rounded-0" style="font-size: 0.85rem;">6.00</span></td>
+                        </tr>
+                        <tr>
+                            <td>Операционни системи</td>
+                            <td style="text-align: center;"><span class="badge bg-primary rounded-0" style="font-size: 0.85rem;">6.00</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch('/api/statistics')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('student-count').innerText = data.students;
-                    document.getElementById('teacher-count').innerText = data.teachers;
-                });
-        });
-    </script>
-}

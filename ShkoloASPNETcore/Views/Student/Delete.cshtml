@@ -1,37 +1,26 @@
 ﻿@model ShkoloASPNETcore.Infrastructure.Data.Models.Student
 
 @{
-    ViewData["Title"] = "Delete Student";
+    ViewData["Title"] = "Изтриване на ученик";
 }
 
 <div class="container mt-4">
-    <div class="alert alert-danger shadow-sm">
-        <h3 class="mb-2"><i class="bi bi-exclamation-triangle"></i> Warning!</h3>
-        <p class="mb-0">Are you absolutely sure you want to remove this record? This action cannot be undone.</p>
-    </div>
+    <div class="card border-danger shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Потвърждение за изтриване</h4>
+        </div>
+        <div class="card-body">
+            <h5>Сигурни ли сте, че искате да изтриете този запис?</h5>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-2">Ученик</dt>
+                <dd class="col-sm-10">@Model.FirstName @Model.LastName</dd>
+            </dl>
 
-    <div class="card p-4 shadow-sm bg-light mt-3">
-        <h4>Student Details</h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-3 text-secondary">
-                Internal Database ID
-            </dt>
-            <dd class="col-sm-9">
-                @Html.DisplayFor(model => model.Id)
-            </dd>
-            <dt class="col-sm-3 text-secondary">
-                Enrollment Number
-            </dt>
-            <dd class="col-sm-9">
-                @Html.DisplayFor(model => model.EnrollmentNumber)
-            </dd>
-        </dl>
-
-        <form asp-action="Delete" class="mt-3">
-            <input type="hidden" asp-for="Id" />
-            <button type="submit" class="btn btn-danger me-2">Confirm Delete</button>
-            <a asp-action="Index" class="btn btn-secondary">Cancel and Go Back</a>
-        </form>
+            <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
+                <button type="submit" class="btn btn-danger">Да, изтрий</button>
+                <a asp-action="Index" class="btn btn-secondary">Отказ</a>
+            </form>
+        </div>
     </div>
 </div>
