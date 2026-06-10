@@ -1,9 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services.Contracts;
 
@@ -13,12 +10,10 @@ namespace ShkoloASPNETcore.Web.Controllers
     public class TeacherController : Controller
     {
         private readonly ITeacherService _teacherService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TeacherController(ITeacherService teacherService, UserManager<ApplicationUser> userManager)
+        public TeacherController(ITeacherService teacherService)
         {
             _teacherService = teacherService;
-            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -27,41 +22,30 @@ namespace ShkoloASPNETcore.Web.Controllers
             return View(teachers);
         }
 
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet]
+        public IActionResult Create()
         {
-            if (id == null) return NotFound();
-
-            var teacher = await _teacherService.GetTeacherByIdAsync(id.Value);
-            if (teacher == null) return NotFound();
-
-            return View(teacher);
-        }
-
-        public async Task<IActionResult> Create()
-        {
-            ViewData["ApplicationUserId"] = new SelectList(await _userManager.Users.ToListAsync(), "Id", "Id");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ApplicationUserId,Department")] Teacher teacher)
+        public async Task<IActionResult> Create(Teacher teacher)
         {
-            teacher.ApplicationUserId = "1";
-            teacher.ApplicationUser = null;
-
+            ModelState.Remove("Subjects");
             ModelState.Remove("ApplicationUser");
-            ModelState.Remove("ApplicationUserId");
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await _teacherService.AddTeacherAsync(teacher);
-                return RedirectToAction(nameof(Index));
+                return View(teacher);
             }
-            ViewData["ApplicationUserId"] = new SelectList(await _userManager.Users.ToListAsync(), "Id", "Id", teacher.ApplicationUserId);
-            return View(teacher);
+
+            await _teacherService.AddTeacherAsync(teacher, teacher.ApplicationUserId);
+            TempData["SuccessMessage"] = "Учителят е добавен успешно!";
+            return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -69,42 +53,29 @@ namespace ShkoloASPNETcore.Web.Controllers
             var teacher = await _teacherService.GetTeacherByIdAsync(id.Value);
             if (teacher == null) return NotFound();
 
-            ViewData["ApplicationUserId"] = new SelectList(await _userManager.Users.ToListAsync(), "Id", "Id", teacher.ApplicationUserId);
             return View(teacher);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,Department")] Teacher teacher)
+        public async Task<IActionResult> Edit(int id, Teacher teacher)
         {
             if (id != teacher.Id) return NotFound();
 
             teacher.ApplicationUser = null;
             ModelState.Remove("ApplicationUser");
+            ModelState.Remove("Subjects");
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _teacherService.UpdateTeacherAsync(teacher);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!await _teacherService.TeacherExistsAsync(teacher.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _teacherService.UpdateTeacherAsync(teacher);
+                TempData["SuccessMessage"] = "Данните на учителя бяха обновени успешно!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(await _userManager.Users.ToListAsync(), "Id", "Id", teacher.ApplicationUserId);
             return View(teacher);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -120,6 +91,7 @@ namespace ShkoloASPNETcore.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _teacherService.DeleteTeacherAsync(id);
+            TempData["SuccessMessage"] = "Учителят беше изтрит успешно!";
             return RedirectToAction(nameof(Index));
         }
     }

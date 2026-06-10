@@ -1,46 +1,48 @@
 ﻿@model ShkoloASPNETcore.Infrastructure.Data.Models.Grade
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Въвеждане";
 }
 
-<h1>Create</h1>
+<h1>Въвеждане</h1>
 
-<h4>Grade</h4>
+<h4>Оценка</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Value" class="control-label"></label>
-                <input asp-for="Value" class="form-control" />
+                <label class="control-label">Стойност</label>
+                <input asp-for="Value" class="form-control" type="number" step="0.01" min="2.00" max="6.00" />
                 <span asp-validation-for="Value" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StudentId" class="control-label"></label>
-                <select asp-for="StudentId" class ="form-control" asp-items="ViewBag.StudentId"></select>
+                <label class="control-label">Ученик</label>
+                <select asp-for="StudentId" class="form-control" asp-items="ViewBag.StudentId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="SubjectId" class="control-label"></label>
-                <select asp-for="SubjectId" class ="form-control" asp-items="ViewBag.SubjectId"></select>
+                <label class="control-label">Предмет</label>
+                <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.SubjectId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="DateIssued" class="control-label"></label>
-                <input asp-for="DateIssued" class="form-control" />
+                <label class="control-label">Дата на издаване</label>
+                <input asp-for="DateIssued" class="form-control" type="datetime-local" />
                 <span asp-validation-for="DateIssued" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group mt-3">
+                <input type="submit" value="Въвеждане" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="mt-3">
+    <a asp-action="Index">Обратно към списъка</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

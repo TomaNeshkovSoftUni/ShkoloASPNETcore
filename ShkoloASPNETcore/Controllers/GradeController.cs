@@ -1,26 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services.Contracts;
 
 namespace ShkoloASPNETcore.Web.Controllers
 {
+    [Authorize]
     public class GradeController : Controller
     {
         private readonly IGradeService _gradeService;
-        private readonly IStudentService _studentService;
-        private readonly ISubjectService _subjectService;
 
-        public GradeController(
-            IGradeService gradeService,
-            IStudentService studentService,
-            ISubjectService subjectService)
+        public GradeController(IGradeService gradeService)
         {
             _gradeService = gradeService;
-            _studentService = studentService;
-            _subjectService = subjectService;
         }
 
         public async Task<IActionResult> Index()
@@ -29,21 +23,10 @@ namespace ShkoloASPNETcore.Web.Controllers
             return View(grades);
         }
 
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet]
+        public IActionResult Create()
         {
-            if (id == null) return NotFound();
-
-            var grade = await _gradeService.GetGradeByIdAsync(id.Value);
-            if (grade == null) return NotFound();
-
-            return View(grade);
-        }
-
-        public async Task<IActionResult> Create()
-        {
-            ViewData["StudentId"] = new SelectList(await _studentService.GetAllStudentsAsync(), "Id", "Id");
-            ViewData["SubjectId"] = new SelectList(await _subjectService.GetAllSubjectsAsync(), "Id", "Name");
-            return View();
+            return View(new Grade { DateIssued = DateTime.Now });
         }
 
         [HttpPost]
@@ -53,26 +36,32 @@ namespace ShkoloASPNETcore.Web.Controllers
             ModelState.Remove("Student");
             ModelState.Remove("Subject");
 
-            if (ModelState.IsValid)
+            if (grade.DateIssued == default)
             {
-                await _gradeService.AddGradeAsync(grade);
-                return RedirectToAction(nameof(Index));
+                grade.DateIssued = DateTime.Now;
             }
-            ViewData["StudentId"] = new SelectList(await _studentService.GetAllStudentsAsync(), "Id", "Id", grade.StudentId);
-            ViewData["SubjectId"] = new SelectList(await _subjectService.GetAllSubjectsAsync(), "Id", "Name", grade.SubjectId);
-            return View(grade);
+
+            if (!ModelState.IsValid)
+            {
+                return View(grade);
+            }
+
+            await _gradeService.AddGradeAsync(grade);
+            TempData["SuccessMessage"] = "Оценката е въведена успешно!";
+            return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
 
-            var grade = await _gradeService.GetGradeByIdAsync(id.Value);
-            if (grade == null) return NotFound();
+            var grade = await _gradeService.GetAllGradesAsync();
+            var currentGrade = System.Linq.Enumerable.FirstOrDefault(grade, g => g.Id == id.Value);
 
-            ViewData["StudentId"] = new SelectList(await _studentService.GetAllStudentsAsync(), "Id", "Id", grade.StudentId);
-            ViewData["SubjectId"] = new SelectList(await _subjectService.GetAllSubjectsAsync(), "Id", "Name", grade.SubjectId);
-            return View(grade);
+            if (currentGrade == null) return NotFound();
+
+            return View(currentGrade);
         }
 
         [HttpPost]
@@ -86,36 +75,24 @@ namespace ShkoloASPNETcore.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _gradeService.UpdateGradeAsync(grade);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!await _gradeService.GradeExistsAsync(grade.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _gradeService.UpdateGradeAsync(grade);
+                TempData["SuccessMessage"] = "Оценката е коригирана успешно!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentId"] = new SelectList(await _studentService.GetAllStudentsAsync(), "Id", "Id", grade.StudentId);
-            ViewData["SubjectId"] = new SelectList(await _subjectService.GetAllSubjectsAsync(), "Id", "Name", grade.SubjectId);
             return View(grade);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
 
-            var grade = await _gradeService.GetGradeByIdAsync(id.Value);
-            if (grade == null) return NotFound();
+            var grades = await _gradeService.GetAllGradesAsync();
+            var currentGrade = System.Linq.Enumerable.FirstOrDefault(grades, g => g.Id == id.Value);
 
-            return View(grade);
+            if (currentGrade == null) return NotFound();
+
+            return View(currentGrade);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -123,6 +100,7 @@ namespace ShkoloASPNETcore.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _gradeService.DeleteGradeAsync(id);
+            TempData["SuccessMessage"] = "Оценката е изтрита успешно!";
             return RedirectToAction(nameof(Index));
         }
     }

@@ -28,8 +28,9 @@ namespace ShkoloASPNETcore.Services
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task AddTeacherAsync(Teacher teacher)
+        public async Task AddTeacherAsync(Teacher teacher, string userId)
         {
+            teacher.ApplicationUserId = userId;
             await _context.Teachers.AddAsync(teacher);
             await _context.SaveChangesAsync();
         }
