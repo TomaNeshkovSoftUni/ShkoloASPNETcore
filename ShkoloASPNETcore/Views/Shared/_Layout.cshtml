@@ -3,369 +3,158 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SHKOLO</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - Shkolo</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ShkoloASPNETcore.styles.css" asp-append-version="true" />
+
     <style>
-        :root {
-            --shkolo-blue: #1b4366;
-            --shkolo-light-blue: #538cb3;
-            --shkolo-bg: #eef2f5;
-            --shkolo-teal: #40bca6;
-            --shkolo-orange: #e65a4b;
-        }
-
         body {
-            background-color: var(--shkolo-bg);
+            background-color: #f4f6f9;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
+        }
+        /* Shkolo Sidebar Styles */
+        .shkolo-sidebar {
+            background-color: #1e2235;
+            min-width: 250px;
+            max-width: 250px;
+            min-height: 100vh;
+            color: #b2b7c6;
+            transition: all 0.3s;
         }
 
-        .guest-body {
-            background-color: var(--shkolo-light-blue);
+            .shkolo-sidebar .brand-area {
+                background-color: #161929;
+                padding: 1.5rem;
+                font-size: 1.4rem;
+                font-weight: 700;
+                letter-spacing: 1px;
+            }
+
+                .shkolo-sidebar .brand-area a {
+                    color: #ffffff !important;
+                    text-decoration: none;
+                }
+
+            .shkolo-sidebar .brand-dot {
+                color: #00d27a;
+            }
+
+        .shkolo-nav-link {
+            color: #b2b7c6;
+            padding: 0.8rem 1.5rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        .shkolo-login-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 4px;
-            width: 420px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            border: none;
-        }
-
-        .shkolo-tabs {
-            display: flex;
-            border-bottom: 1px solid rgba(0,0,0,0.08);
-        }
-
-        .shkolo-tab {
-            flex: 1;
-            text-align: center;
-            padding: 15px;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 14px;
-            color: #777;
+            gap: 12px;
             text-decoration: none;
-            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
         }
 
-            .shkolo-tab.active {
-                background: #ffffff;
-                color: var(--shkolo-blue);
-                border-top-left-radius: 4px;
+            .shkolo-nav-link:hover {
+                color: #ffffff;
+                background-color: #262b42;
             }
 
-            .shkolo-tab:not(.active) {
-                background: rgba(255,255,255,0.4);
+            .shkolo-nav-link.active-menu {
+                color: #ffffff;
+                background-color: #303755;
+                border-left: 4px solid #00d27a;
             }
 
-        .shkolo-input-group {
-            position: relative;
-            margin-bottom: 15px;
+            .shkolo-nav-link i {
+                font-size: 1.2rem;
+            }
+
+        .main-wrapper {
+            flex: 1;
+            min-width: 0;
         }
-
-            .shkolo-input-group i {
-                position: absolute;
-                left: 12px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: #888;
-            }
-
-        .shkolo-input {
-            width: 100%;
-            padding: 12px 12px 12px 40px;
-            border: 1px solid #ccc;
-            border-radius: 2px;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .shkolo-btn-teal {
-            background-color: var(--shkolo-teal);
-            color: white;
-            width: 100%;
-            padding: 12px;
-            border: none;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-radius: 2px;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-        }
-
-            .shkolo-btn-teal:hover {
-                background-color: #35a38f;
-                color: white;
-            }
 
         .shkolo-topbar {
-            background-color: var(--shkolo-blue);
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1030;
+            background-color: #ffffff;
+            height: 70px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
         }
 
-        .shkolo-sidebar {
-            width: 240px;
-            background-color: var(--shkolo-blue);
-            position: fixed;
-            top: 50px;
-            bottom: 0;
-            left: 0;
-            z-index: 1000;
-            padding-top: 10px;
-            overflow-y: auto;
+        @@media (max-width: 768px) {
+            .shkolo-sidebar {
+                display: none; /* Can be enhanced with JS toggle later if needed */
+            }
         }
-
-            .shkolo-sidebar .nav-link {
-                color: #c2d1db;
-                padding: 12px 20px;
-                font-size: 14px;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                border-left: 4px solid transparent;
-            }
-
-                .shkolo-sidebar .nav-link:hover {
-                    background-color: rgba(255,255,255,0.05);
-                    color: white;
-                }
-
-            .shkolo-sidebar .nav-item.active .nav-link {
-                background-color: var(--shkolo-orange);
-                color: white;
-                border-left: 4px solid #fff;
-            }
-
-        .shkolo-content-wrapper {
-            margin-left: 240px;
-            padding: 75px 25px 25px 25px;
-            min-height: 100vh;
-        }
-
-        .shkolo-error-block {
-            border-radius: 4px;
-            font-size: 14px;
-            display: none;
-        }
-
-            .shkolo-error-block ul {
-                margin-left: 15px;
-            }
-
-            .shkolo-error-block li {
-                margin-bottom: 5px;
-            }
     </style>
 </head>
-<body class="@(User.Identity?.IsAuthenticated == true ? "" : "guest-body")">
+<body>
 
-    @if (User.Identity?.IsAuthenticated == true)
-    {
-        <div class="shkolo-topbar">
-            <div class="d-flex align-items-center gap-3">
-                <span class="fw-bold tracking-wider" style="letter-spacing: 1px;">SHKOLO</span>
-                <small class="text-white-50 d-none d-md-inline">| Дневник</small>
+    <div class="d-flex">
+        <aside class="shkolo-sidebar d-flex flex-column">
+            <div class="brand-area text-center border-bottom border-dark">
+                <a asp-controller="Home" asp-action="Index">
+                    shkolo<span class="brand-dot">.</span>
+                </a>
             </div>
-            <div class="d-flex align-items-center gap-3">
-                <i class="bi bi-bell position-relative fs-5" style="cursor: pointer;">
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" style="font-size: 9px; padding: 3px 6px;">4</span>
-                </i>
-                <i class="bi bi-envelope fs-5" style="cursor: pointer;"></i>
-                <div class="d-flex align-items-center gap-2 border-start ps-3">
-                    <i class="bi bi-person-circle fs-5"></i>
-                    <span class="small d-none d-sm-inline">@User.Identity.Name</span>
-                    <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                        <button type="submit" class="btn btn-link text-white p-0 ms-2" style="text-decoration: none;"><i class="bi bi-box-arrow-right"></i></button>
-                    </form>
-                </div>
+            <nav class="flex-grow-1 mt-3">
+                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active-menu" : "")" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-speedometer2"></i> Табло / Начало
+                </a>
+                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Student" ? "active-menu" : "")" asp-controller="Student" asp-action="Index">
+                    <i class="bi bi-people"></i> Ученици
+                </a>
+                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Teacher" ? "active-menu" : "")" asp-controller="Teacher" asp-action="Index">
+                    <i class="bi bi-person-badge"></i> Учители
+                </a>
+                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Subject" ? "active-menu" : "")" asp-controller="Subject" asp-action="Index">
+                    <i class="bi bi-book"></i> Предмети
+                </a>
+                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Grade" ? "active-menu" : "")" asp-controller="Grade" asp-action="Index">
+                    <i class="bi bi-journal-check"></i> Оценки
+                </a>
+                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Absence" ? "active-menu" : "")" asp-controller="Absence" asp-action="Index">
+                    <i class="bi bi-calendar-x"></i> Отсъствия
+                </a>
+                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Remark" ? "active-menu" : "")" asp-controller="Remark" asp-action="Index">
+                    <i class="bi bi-exclamation-triangle"></i> Забележки
+                </a>
+            </nav>
+            <div class="p-3 text-center small text-muted border-top border-dark">
+                Система v10.0
             </div>
-        </div>
+        </aside>
 
-        <div class="shkolo-sidebar">
-            <ul class="nav flex-column h-100">
-                <li class="nav-item active">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">
-                        <i class="bi bi-house-door-fill"></i> Начало
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Student" asp-action="Index">
-                        <i class="bi bi-people-fill"></i> Ученици
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Grade" asp-action="Index">
-                        <i class="bi bi-journal-bookmark-fill"></i> Оценки
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Absence" asp-action="Index">
-                        <i class="bi bi-exclamation-triangle-fill"></i> Отсъствия
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Remark" asp-action="Index">
-                        <i class="bi bi-chat-left-text-fill"></i> Забележки
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Subject" asp-action="Index">
-                        <i class="bi bi-book-half"></i> Предмети
-                    </a>
-                </li>
-                @if (User.IsInRole("Administrator"))
+        <div class="main-wrapper d-flex flex-column">
+            <header class="shkolo-topbar d-flex align-items-center justify-content-end px-4">
+                <partial name="_LoginPartial" />
+            </header>
+
+            <main class="container-fluid p-4 flex-grow-1">
+                @if (TempData["SuccessMessage"] != null)
                 {
-                    <li class="nav-item">
-                        <a class="nav-link text-warning" asp-controller="Teacher" asp-action="Index">
-                            <i class="bi bi-shield-lock-fill"></i> Учители (Админ)
-                        </a>
-                    </li>
+                    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 }
 
-                <li class="mt-auto nav-item d-flex justify-content-center gap-3 p-3 text-white-50 small border-top" style="background-color: rgba(255,255,255,0.05);">
-                    <i class="bi bi-facebook fs-6"></i>
-                    <i class="bi bi-instagram fs-6"></i>
-                    <i class="bi bi-youtube fs-6"></i>
-                </li>
-                <li class="nav-item d-flex justify-content-center gap-2 p-3 text-white-50 small border-top" style="background-color: rgba(255,255,255,0.05);">
-                    <button class="btn btn-sm btn-outline-light rounded-1 px-3 py-1 small">
-                        <i class="bi bi-google-play me-1"></i> Google Play
-                    </button>
-                    <button class="btn btn-sm btn-outline-light rounded-1 px-3 py-1 small">
-                        <i class="bi bi-apple me-1"></i> App Store
-                    </button>
-                </li>
-            </ul>
-        </div>
-
-        <div class="shkolo-content-wrapper">
-            @RenderBody()
-        </div>
-    }
-    else
-    {
-        <div class="d-none">
-            @RenderBody()
-        </div>
-
-        <div class="text-center">
-            <div class="mb-4 text-white fw-bold fs-3" style="letter-spacing: 3px;">SHKOLO</div>
-            <div class="shkolo-login-card text-start">
-                <div class="shkolo-tabs">
-                    <div class="shkolo-tab active">Вход</div>
-                    <div class="shkolo-tab">Регистрация</div>
+                <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
+                    @RenderBody()
                 </div>
-                <div class="p-4">
-                    <form id="shkoloLoginForm" asp-area="Identity" asp-page="/Account/Login" method="post">
+            </main>
 
-                        <div id="validationErrorBlock" class="shkolo-error-block mb-3 p-3 rounded-2 text-danger" style="background-color: #fcebeb; border: 1px solid #f8c2b5;">
-                            <div class="fw-bold fs-6 mb-2">Грешка!</div>
-                            <ul id="errorList" class="mb-0 small ps-3">
-                            </ul>
-                        </div>
-
-                        <div class="shkolo-input-group">
-                            <i class="bi bi-person"></i>
-                            <input type="text" id="loginEmail" name="Input.Email" class="shkolo-input" placeholder="Имейл или потребителско име" />
-                        </div>
-                        <div class="shkolo-input-group">
-                            <i class="bi bi-lock"></i>
-                            <input type="password" id="loginPassword" name="Input.Password" class="shkolo-input" placeholder="Парола" />
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-4 small">
-                            <label class="text-muted" style="cursor: pointer;">
-                                <input type="checkbox" name="Input.RememberMe" class="me-1" /> Запомни ме
-                            </label>
-                            <a href="#" class="text-decoration-none text-secondary">Забравена парола</a>
-                        </div>
-                        <button type="submit" class="shkolo-btn-teal mb-3">Вход</button>
-                    </form>
-
-                    <div class="text-center my-3 text-muted position-relative">
-                        <hr class="m-0" />
-                        <span class="position-absolute top-50 start-50 translate-middle bg-white px-2 small text-uppercase" style="font-size: 11px;">Или</span>
-                    </div>
-
-                    <div class="d-flex justify-content-center gap-2 mt-3">
-                        <button class="btn btn-outline-secondary rounded-1 px-3 py-2"><i class="bi bi-microsoft text-danger"></i></button>
-                        <button class="btn btn-outline-secondary rounded-1 px-3 py-2"><i class="bi bi-facebook text-primary"></i></button>
-                        <button class="btn btn-outline-secondary rounded-1 px-3 py-2"><i class="bi bi-google text-success"></i></button>
-                        <button class="btn btn-outline-secondary rounded-1 px-3 py-2"><i class="bi bi-book text-warning"></i></button>
-                    </div>
+            <footer class="bg-white border-top py-3 px-4 text-muted small">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>&copy; 2026 - SHKOLO Платформа</div>
+                    <div><a asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-muted">Поверителност</a></div>
                 </div>
-            </div>
-            <div class="mt-4 text-white-50 small">
-                При технически проблеми: <a href="mailto:support@shkolo.com" class="text-white text-decoration-none">support@shkolo.com</a>
-            </div>
+            </footer>
         </div>
-    }
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById("shkoloLoginForm");
-            if (form) {
-                form.addEventListener("submit", function (e) {
-                    const emailInput = document.getElementById("loginEmail").value.trim();
-                    const passwordInput = document.getElementById("loginPassword").value.trim();
-
-                    const errorBlock = document.getElementById("validationErrorBlock");
-                    const errorList = document.getElementById("errorList");
-
-                    let errors = [];
-
-                    if (!emailInput) {
-                        errors.push("Полето Потребителско име е задължително.");
-                    }
-                    if (!passwordInput) {
-                        errors.push("Полето Парола е задължително.");
-                    }
-
-                    if (errors.length > 0) {
-                        e.preventDefault(); 
-
-                        errorList.innerHTML = "";
-
-                        errors.forEach(function (errorText) {
-                            const li = document.createElement("li");
-                            li.textContent = errorText;
-                            errorList.appendChild(li);
-                        });
-
-                        // Add your fun easter egg list item
-                        const funLi = document.createElement("li");
-                        funLi.innerHTML = 'При забравена парола натиснете <a href="#" class="text-danger fw-bold text-decoration-none">ТУК</a> .';
-                        errorList.appendChild(funLi);
-
-                        errorBlock.style.display = "block"; 
-                    }
-                });
-            }
-        });
-    </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmxc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
