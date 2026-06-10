@@ -4,26 +4,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShkoloASPNETcore.Infrastructure.Data;
-using ShkoloASPNETcore.Infrastructure.Data.Enums;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
+using ShkoloASPNETcore.Core.Services.Contracts;
 
 namespace ShkoloASPNETcore.Web.Controllers
 {
     public class AbsenceController : Controller
     {
+        private readonly IAbsenceService _absenceService;
         private readonly ShkoloDbContext _context;
 
-        public AbsenceController(ShkoloDbContext context)
+        public AbsenceController(IAbsenceService absenceService, ShkoloDbContext context)
         {
+            _absenceService = absenceService;
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            var absences = await _context.Absences
-                .Include(a => a.Student)
-                .Include(a => a.Subject)
-                .ToListAsync();
+            var absences = await _absenceService.GetAllAbsencesAsync();
             return View(absences);
         }
 
@@ -44,8 +43,7 @@ namespace ShkoloASPNETcore.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(absence);
-                await _context.SaveChangesAsync();
+                await _absenceService.AddAbsenceAsync(absence);
                 TempData["SuccessMessage"] = "Отсъствието/Закъснението е добавено успешно!";
                 return RedirectToAction(nameof(Index));
             }

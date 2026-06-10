@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ShkoloASPNETcore.Core.Services.Contracts;
 using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services;
@@ -23,6 +24,7 @@ builder.Services.AddControllersWithViews();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IAbsenceService, AbsenceService>();
 
 var app = builder.Build();
 
