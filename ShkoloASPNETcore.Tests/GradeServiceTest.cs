@@ -48,7 +48,8 @@ namespace ShkoloASPNETcore.Tests
                 Value = 6.00m,
                 StudentId = student.Id,
                 SubjectId = subject.Id,
-                DateIssued = DateTime.Now
+                DateIssued = DateTime.Now,
+                Issuer = "Петър Петров"
             };
 
             await _gradeService.AddGradeAsync(grade);
@@ -57,6 +58,7 @@ namespace ShkoloASPNETcore.Tests
 
             Assert.That(grades.Count, Is.EqualTo(1));
             Assert.That(grades[0].Value, Is.EqualTo(6.00m));
+            Assert.That(grades[0].Issuer, Is.EqualTo("Петър Петров"));
         }
 
         [Test]
@@ -81,8 +83,10 @@ namespace ShkoloASPNETcore.Tests
                 Value = 5.50m,
                 StudentId = student.Id,
                 SubjectId = subject.Id,
-                DateIssued = DateTime.Now
+                DateIssued = DateTime.Now,
+                Issuer = "Ангел Ангелов"
             };
+
             Context.Grades.Add(grade);
             await Context.SaveChangesAsync();
 

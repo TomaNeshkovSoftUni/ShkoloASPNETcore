@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using ShkoloASPNETcore.Infrastructure.Data.Models;
+﻿using ShkoloASPNETcore.Infrastructure.Data.Models;
 
-namespace ShkoloASPNETcore.Services.Contracts
+namespace ShkoloASPNETcore.Services.Contracts;
+
+public interface IGradeService
 {
-    public interface IGradeService
-    {
-        Task<IEnumerable<Grade>> GetAllGradesAsync();
-        Task<Grade?> GetGradeByIdAsync(int id);
-        Task AddGradeAsync(Grade grade);
-        Task UpdateGradeAsync(Grade grade);
-        Task DeleteGradeAsync(int id);
-        Task<bool> GradeExistsAsync(int id);
-    }
+    Task<IEnumerable<Grade>> GetAllGradesAsync();
+    Task<Student?> GetStudentWithUserAsync(int studentId);
+    Task<IEnumerable<Subject>> GetAllSubjectsAsync();
+    Task AddGradeAsync(Grade grade);
+    Task<int?> DeleteGradeAsync(int id);
 }

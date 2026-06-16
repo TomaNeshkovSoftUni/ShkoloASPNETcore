@@ -1,62 +1,57 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services.Contracts;
 
-namespace ShkoloASPNETcore.Services
+namespace ShkoloASPNETcore.Services;
+
+public class GradeService : IGradeService
 {
-    public class GradeService : IGradeService
+    private readonly ShkoloDbContext _context;
+
+    public GradeService(ShkoloDbContext context)
     {
-        private readonly ShkoloDbContext _context;
+        _context = context;
+    }
 
-        public GradeService(ShkoloDbContext context)
+    public async Task<IEnumerable<Grade>> GetAllGradesAsync()
+    {
+        return await _context.Grades.ToListAsync();
+    }
+
+    public async Task<Student?> GetStudentWithUserAsync(int studentId)
+    {
+        return await _context.Students
+            .Include(s => s.ApplicationUser)
+            .FirstOrDefaultAsync(s => s.Id == studentId);
+    }
+
+    public async Task<IEnumerable<Subject>> GetAllSubjectsAsync()
+    {
+        return await _context.Subjects.ToListAsync();
+    }
+
+    public async Task AddGradeAsync(Grade grade)
+    {
+        grade.DateIssued = DateTime.Now;
+        await _context.Grades.AddAsync(grade);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<int?> DeleteGradeAsync(int id)
+    {
+        var grade = await _context.Grades.FindAsync(id);
+
+        if (grade == null)
         {
-            _context = context;
+            return null;
         }
 
-        public async Task<IEnumerable<Grade>> GetAllGradesAsync()
-        {
-            return await _context.Grades
-                .Include(g => g.Student)
-                .Include(g => g.Subject)
-                .ToListAsync();
-        }
+        int studentId = grade.StudentId;
 
-        public async Task<Grade?> GetGradeByIdAsync(int id)
-        {
-            return await _context.Grades
-                .Include(g => g.Student)
-                .Include(g => g.Subject)
-                .FirstOrDefaultAsync(m => m.Id == id);
-        }
+        _context.Grades.Remove(grade);
+        await _context.SaveChangesAsync();
 
-        public async Task AddGradeAsync(Grade grade)
-        {
-            await _context.Grades.AddAsync(grade);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateGradeAsync(Grade grade)
-        {
-            _context.Grades.Update(grade);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteGradeAsync(int id)
-        {
-            var grade = await _context.Grades.FindAsync(id);
-            if (grade != null)
-            {
-                _context.Grades.Remove(grade);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task<bool> GradeExistsAsync(int id)
-        {
-            return await _context.Grades.AnyAsync(e => e.Id == id);
-        }
+        return studentId;
     }
 }

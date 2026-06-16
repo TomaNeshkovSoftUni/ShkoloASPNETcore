@@ -1,10 +1,11 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ShkoloASPNETcore.Core.Services;
 using ShkoloASPNETcore.Core.Services.Contracts;
 using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services;
 using ShkoloASPNETcore.Services.Contracts;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
