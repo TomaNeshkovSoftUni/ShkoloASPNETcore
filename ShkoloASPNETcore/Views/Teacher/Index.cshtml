@@ -1,6 +1,11 @@
-﻿@model IEnumerable<ShkoloASPNETcore.Infrastructure.Data.Models.Teacher>
+﻿@using Microsoft.AspNetCore.Identity
+@using ShkoloASPNETcore.Infrastructure.Data.Models
+@inject UserManager<ApplicationUser> UserManager
+
+@model IEnumerable<ShkoloASPNETcore.Infrastructure.Data.Models.Teacher>
 @{
     ViewData["Title"] = "Учители";
+    var currentUserId = UserManager.GetUserId(User);
 }
 
 <div class="container mt-4">
@@ -8,19 +13,36 @@
         <h2 class="m-0 text-uppercase fw-bold">Списък на Учителите</h2>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Внимание!</strong> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
             <tr>
                 <th>ИМЕ</th>
                 <th>ФАМИЛИЯ</th>
                 <th>ОТДЕЛ (DEPARTMENT)</th>
+                <th class="text-center">ДЕЙСТВИЯ</th>
             </tr>
         </thead>
         <tbody>
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="3" class="text-center p-3">Няма регистрирани учители в системата.</td>
+                    <td colspan="4" class="text-center p-3">Няма регистрирани учители в системата.</td>
                 </tr>
             }
             @foreach (var item in Model)
@@ -29,6 +51,19 @@
                     <td class="fw-bold text-dark">@item.FirstName</td>
                     <td class="fw-bold text-dark">@item.LastName</td>
                     <td>@(string.IsNullOrWhiteSpace(item.Department) ? "Не е посочен" : item.Department)</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">Детайли</a>
+
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                @if (item.ApplicationUserId != currentUserId)
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Изтрий</a>
+                                }
+                            }
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>

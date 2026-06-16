@@ -86,5 +86,18 @@ namespace ShkoloASPNETcore.Tests
             Assert.That(result.LastName, Is.EqualTo("Стоянова"));
             Assert.That(result.Department, Is.EqualTo("История"));
         }
+
+        [Test]
+        public async Task DeleteTeacherAsync_ShouldSuccessfullyRemoveTeacher()
+        {
+            var teacher = new Teacher { FirstName = "Христо", LastName = "Ботев", Department = "Литература", ApplicationUserId = "u-xb" };
+            Context.Teachers.Add(teacher);
+            await Context.SaveChangesAsync();
+
+            await _teacherService.DeleteTeacherAsync(teacher.Id);
+            var result = await _teacherService.GetTeacherByIdAsync(teacher.Id);
+
+            Assert.That(result, Is.Null);
+        }
     }
 }

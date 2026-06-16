@@ -1,49 +1,47 @@
 ﻿@model ShkoloASPNETcore.Infrastructure.Data.Models.Grade
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактиране на Оценка";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
+    <h2 class="text-uppercase fw-bold border-bottom border-dark pb-2 mb-4">Редактиране на Оценка</h2>
 
-<h4>Grade</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="card p-4 shadow-sm" style="max-width: 600px;">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-bold"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Value" class="control-label"></label>
-                <input asp-for="Value" class="form-control" />
+            <input type="hidden" asp-for="DateIssued" />
+
+            <div class="mb-3">
+                <label asp-for="StudentId" class="form-label fw-bold">Ученик</label>
+                <select asp-for="StudentId" class="form-select" asp-items="ViewBag.StudentId" disabled></select>
+                <input type="hidden" asp-for="StudentId" />
+                <span class="form-text text-muted">Предметът и ученикът не могат да бъдат променяни след създаване.</span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SubjectId" class="form-label fw-bold">Предмет</label>
+                <select asp-for="SubjectId" class="form-select" asp-items="ViewBag.SubjectId" disabled></select>
+                <input type="hidden" asp-for="SubjectId" />
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Value" class="form-label fw-bold">Оценка</label>
+                <input asp-for="Value" class="form-control border-dark" type="text" />
                 <span asp-validation-for="Value" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="StudentId" class="control-label"></label>
-                <select asp-for="StudentId" class="form-control" asp-items="ViewBag.StudentId"></select>
-                <span asp-validation-for="StudentId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SubjectId" class="control-label"></label>
-                <select asp-for="SubjectId" class="form-control" asp-items="ViewBag.SubjectId"></select>
-                <span asp-validation-for="SubjectId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateIssued" class="control-label"></label>
-                <input asp-for="DateIssued" class="form-control" />
-                <span asp-validation-for="DateIssued" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="d-flex gap-2 mt-2 border-top border-dark pt-3">
+                <button type="submit" class="btn btn-dark px-4 fw-bold">ЗАПАЗИ</button>
+                <a asp-action="Index" class="btn btn-outline-dark px-4 fw-bold">ОТКАЗ</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

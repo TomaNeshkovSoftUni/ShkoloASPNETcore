@@ -19,7 +19,7 @@
                 <th>ВОДЕЩ УЧИТЕЛ</th>
                 @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
                 {
-                    <th style="width: 120px;">ДЕЙСТВИЯ</th>
+                    <th style="width: 250px;">ДЕЙСТВИЯ</th>
                 }
             </tr>
         </thead>
@@ -38,7 +38,11 @@
                     @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
                     {
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark w-100">КОРИГИРАЙ</a>
+                            <div class="d-flex gap-1">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-dark">ДЕТАЙЛИ</a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark">КОРИГИРАЙ</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">ИЗТРИЙ</a>
+                            </div>
                         </td>
                     }
                 </tr>

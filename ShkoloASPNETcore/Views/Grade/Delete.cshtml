@@ -20,7 +20,7 @@
             <dd class="col-sm-8">@Model.Subject?.Name</dd>
         </dl>
 
-        <form asp-action="Delete" class="mt-4 border-top border-dark pt-3 d-flex gap-2">
+        <form asp-action="Delete" method="post" class="mt-4 border-top border-dark pt-3 d-flex gap-2">
             <input type="hidden" asp-for="Id" />
             <button type="submit" class="btn btn-danger px-4">ПОТВЪРДИ ИЗТРИВАНЕТО</button>
             <a asp-action="Index" class="btn btn-outline-dark px-4">ОТКАЗ</a>

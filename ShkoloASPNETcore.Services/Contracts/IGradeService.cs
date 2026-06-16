@@ -1,12 +1,14 @@
 ﻿using ShkoloASPNETcore.Infrastructure.Data.Models;
 
-namespace ShkoloASPNETcore.Services.Contracts;
-
-public interface IGradeService
+namespace ShkoloASPNETcore.Services.Contracts
 {
-    Task<IEnumerable<Grade>> GetAllGradesAsync();
-    Task<Student?> GetStudentWithUserAsync(int studentId);
-    Task<IEnumerable<Subject>> GetAllSubjectsAsync();
-    Task AddGradeAsync(Grade grade);
-    Task<int?> DeleteGradeAsync(int id);
+    public interface IGradeService
+    {
+        Task<IEnumerable<Grade>> GetAllGradesAsync();
+        Task AddGradeAsync(Grade grade);
+        Task UpdateGradeAsync(Grade grade);
+        Task DeleteGradeAsync(int id);
+        Task<Grade?> GetGradeByIdAsync(int id);
+        Task<IEnumerable<Grade>> GetGradesByStudentIdAsync(int studentId);
+    }
 }

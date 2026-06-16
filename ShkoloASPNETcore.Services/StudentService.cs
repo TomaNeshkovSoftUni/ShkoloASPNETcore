@@ -48,5 +48,10 @@ namespace ShkoloASPNETcore.Services
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<Student?> GetStudentByUserIdAsync(string userId)
+        {
+            return await _context.Students
+                .FirstOrDefaultAsync(s => s.ApplicationUserId == userId);
+        }
     }
 }

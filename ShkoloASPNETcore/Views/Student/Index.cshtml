@@ -8,19 +8,28 @@
         <h2 class="m-0 text-uppercase fw-bold">Списък на Учениците</h2>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
             <tr>
                 <th>ИМЕ</th>
                 <th>ФАМИЛИЯ</th>
                 <th>ID В СИСТЕМАТА</th>
+                <th class="text-center">ДЕЙСТВИЯ</th>
             </tr>
         </thead>
         <tbody>
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="3" class="text-center p-3">Няма регистрирани ученици в системата.</td>
+                    <td colspan="4" class="text-center p-3">Няма регистрирани ученици в системата.</td>
                 </tr>
             }
             @foreach (var item in Model)
@@ -29,6 +38,16 @@
                     <td class="fw-bold text-dark">@item.FirstName</td>
                     <td class="fw-bold text-dark">@item.LastName</td>
                     <td>@item.Id</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">Детайли</a>
+
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Изтрий</a>
+                            }
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>

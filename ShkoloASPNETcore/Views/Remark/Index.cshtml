@@ -1,44 +1,81 @@
-﻿@model IEnumerable<ShkoloASPNETcore.Infrastructure.Data.Models.Remark>
+﻿@using ShkoloASPNETcore.Infrastructure.Data.Enums
+@model IEnumerable<ShkoloASPNETcore.Infrastructure.Data.Models.Remark>
 @{
-    ViewData["Title"] = "Забележки";
+    ViewData["Title"] = "Забележки и Похвали";
 }
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-end mb-3 border-bottom border-dark pb-2">
-        <h2 class="m-0 text-uppercase fw-bold">Забележки и Похвали</h2>
+        <h2 class="m-0 text-uppercase fw-bold">Дневник на отзивите</h2>
         @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
         {
-            <a asp-action="Create" class="btn btn-dark">ДОБАВИ ЗАБЕЛЕЖКА</a>
+            <a asp-action="Create" class="btn btn-dark">ДОБАВИ ОТЗИВ</a>
         }
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
             <tr>
                 <th>УЧЕНИК</th>
                 <th>ПРЕДМЕТ</th>
-                <th>УЧИТЕЛ</th>
-                <th>СЪДЪРЖАНИЕ</th>
                 <th>ТИП</th>
+                <th>ПРОЯВА / КОМЕНТАР</th>
+                <th>ВЪВЕОД ХОРА (УЧИТЕЛ)</th>
                 <th>ДАТА</th>
+                @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
+                {
+                    <th class="text-center">ДЕЙСТВИЯ</th>
+                }
             </tr>
         </thead>
         <tbody>
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="6" class="text-center p-3">Няма намерени забележки или похвали.</td>
+                    <td colspan="7" class="text-center p-3 text-muted">Няма намерени забележки или похвали.</td>
                 </tr>
             }
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Student?.FirstName @item.Student?.LastName</td>
+                    <td><strong>@item.Student?.FirstName @item.Student?.LastName</strong></td>
                     <td>@item.Subject?.Name</td>
-                    <td>@item.Subject?.Teacher?.FirstName @item.Subject?.Teacher?.LastName</td>
-                    <td>@item.Text</td>
-                    <td>@item.Type.ToString()</td>
+                    <td>
+                        @if (item.Type == RemarkType.Похвала)
+                        {
+                            <span class="badge bg-success text-uppercase p-2">Похвала</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger text-uppercase p-2">Забележка</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="fw-bold text-primary">@item.Label</div>
+                        @if (!string.IsNullOrEmpty(item.Comment))
+                        {
+                            <small class="text-muted d-block mt-1"><em>Коментар: @item.Comment</em></small>
+                        }
+                    </td>
+                    <td><small>@item.Issuer</small></td>
                     <td>@item.DateIssued.ToString("dd.MM.yyyy")</td>
+                    @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
+                    {
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">Редакция</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Изтрий</a>
+                            </div>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

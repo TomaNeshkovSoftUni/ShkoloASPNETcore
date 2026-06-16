@@ -1,7 +1,7 @@
-﻿@model ShkoloASPNETcore.Infrastructure.Data.Models.Teacher
+﻿@model ShkoloASPNETcore.Infrastructure.Data.Models.Student
 
 @{
-    ViewData["Title"] = "Детайли за Учител";
+    ViewData["Title"] = "Детайли за Ученик";
 }
 
 <div class="container mt-4">
@@ -9,17 +9,17 @@
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-header bg-info text-white">
-                    <h4 class="mb-0">ℹ️ Детайли за Учител</h4>
+                    <h4 class="mb-0">ℹ️ Профил на ученика</h4>
                 </div>
                 <div class="card-body p-4">
                     <div class="mb-3 border-bottom pb-2">
                         <strong>Име:</strong> <span class="fw-bold fs-5">@Model.FirstName @Model.LastName</span>
                     </div>
                     <div class="mb-3 border-bottom pb-2">
-                        <strong>Отдел (Department):</strong> @(string.IsNullOrWhiteSpace(Model.Department) ? "Не е посочен" : Model.Department)
+                        <strong>Системно ID (Student ID):</strong> <span class="badge bg-secondary">@Model.Id</span>
                     </div>
-                    <div class="mb-3">
-                        <strong>Системно ID на профила:</strong> <span class="text-muted">@Model.ApplicationUserId</span>
+                    <div class="mb-3 border-bottom pb-2">
+                        <strong>Потребителско ID (User ID):</strong> <span class="text-muted small">@Model.ApplicationUserId</span>
                     </div>
 
                     <div class="mt-4 text-center">

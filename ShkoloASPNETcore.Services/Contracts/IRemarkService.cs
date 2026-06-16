@@ -8,5 +8,9 @@ namespace ShkoloASPNETcore.Services.Contracts
     {
         Task<IEnumerable<Remark>> GetAllRemarksAsync();
         Task AddRemarkAsync(Remark remark);
+        Task<Remark?> GetRemarkByIdAsync(int id);
+        Task UpdateRemarkAsync(Remark remark);
+        Task DeleteRemarkAsync(int id);
+        Task<IEnumerable<Remark>> GetRemarksByStudentIdAsync(int studentId);
     }
 }

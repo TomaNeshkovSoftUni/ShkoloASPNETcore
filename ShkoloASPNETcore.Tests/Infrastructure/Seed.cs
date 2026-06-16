@@ -52,7 +52,7 @@ internal static class Seed
         {
             StudentId = studentId,
             SubjectId = subjectId,
-            Text = "Тестова забележка",
+            Comment = "Тестова забележка",
             Type = RemarkType.Забележка,
             DateIssued = DateTime.Now
         };

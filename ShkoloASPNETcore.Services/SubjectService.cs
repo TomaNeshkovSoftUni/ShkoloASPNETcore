@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services.Contracts;
@@ -18,14 +16,16 @@ namespace ShkoloASPNETcore.Services
 
         public async Task<IEnumerable<Subject>> GetAllSubjectsAsync()
         {
-            return await _context.Subjects.Include(s => s.Teacher).ToListAsync();
+            return await _context.Subjects
+                .Include(s => s.Teacher)
+                .ToListAsync();
         }
 
         public async Task<Subject?> GetSubjectByIdAsync(int id)
         {
             return await _context.Subjects
                 .Include(s => s.Teacher)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task AddSubjectAsync(Subject subject)
@@ -48,11 +48,6 @@ namespace ShkoloASPNETcore.Services
                 _context.Subjects.Remove(subject);
                 await _context.SaveChangesAsync();
             }
-        }
-
-        public async Task<bool> SubjectExistsAsync(int id)
-        {
-            return await _context.Subjects.AnyAsync(e => e.Id == id);
         }
     }
 }

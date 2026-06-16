@@ -1,0 +1,52 @@
+﻿@using ShkoloASPNETcore.Infrastructure.Data.Enums
+@model ShkoloASPNETcore.Infrastructure.Data.Models.Remark
+
+@{
+    ViewData["Title"] = "Изтриване на отзив";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">⚠️ Потвърждение за изтриване</h4>
+                </div>
+                <div class="card-body p-4">
+                    <p class="lead text-center">Сигурни ли сте, че искате да изтриете този отзив от дневника?</p>
+                    <hr />
+
+                    <div class="mb-3">
+                        <strong>Ученик:</strong> @Model.Student?.FirstName @Model.Student?.LastName
+                    </div>
+                    <div class="mb-3">
+                        <strong>Предмет:</strong> @Model.Subject?.Name
+                    </div>
+                    <div class="mb-3">
+                        <strong>Тип:</strong>
+                        <span class="badge @(Model.Type == RemarkType.Похвала ? "bg-success" : "bg-danger")">
+                            @Model.Type.ToString()
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Проява:</strong> <span class="text-primary fw-bold">@Model.Label</span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Comment))
+                    {
+                        <div class="mb-3">
+                            <strong>Детайли:</strong> <span class="text-muted">@Model.Comment</span>
+                        </div>
+                    }
+
+                    <form asp-action="Delete" class="mt-4">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">Отказ</a>
+                            <button type="submit" class="btn btn-danger fw-bold">Да, ИЗТРИЙ ЗАПИСА</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

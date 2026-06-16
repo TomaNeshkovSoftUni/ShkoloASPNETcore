@@ -1,123 +1,120 @@
-﻿using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ShkoloASPNETcore.Infrastructure.Data;
 using ShkoloASPNETcore.Infrastructure.Data.Models;
+using ShkoloASPNETcore.Services.Contracts;
+using ShkoloASPNETcore.Web.Models;
 
 namespace ShkoloASPNETcore.Web.Controllers
 {
     [Authorize(Roles = "Administrator,Teacher")]
     public class SubjectController : Controller
     {
-        private readonly ShkoloDbContext _context;
+        private readonly ISubjectService _subjectService;
+        private readonly ITeacherService _teacherService;
 
-        public SubjectController(ShkoloDbContext context)
+        public SubjectController(ISubjectService subjectService, ITeacherService teacherService)
         {
-            _context = context;
+            _subjectService = subjectService;
+            _teacherService = teacherService;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Subjects.ToListAsync());
+            var subjects = await _subjectService.GetAllSubjectsAsync();
+            return View(subjects);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View(new Subject());
+            ViewBag.Teachers = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "LastName");
+            return View(new SubjectFormViewModel());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var subject = await _subjectService.GetSubjectByIdAsync(id);
+            if (subject == null)
+            {
+                return NotFound();
+            }
+            return View(subject);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Subject subject)
+        public async Task<IActionResult> Create(SubjectFormViewModel model)
         {
-            ModelState.Remove("TeacherId");
-            ModelState.Remove("Teacher");
-
             if (ModelState.IsValid)
             {
-                var anyTeacher = await _context.Teachers.FirstOrDefaultAsync();
 
-                if (anyTeacher == null)
+                var subject = new Subject
                 {
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    anyTeacher = new Teacher
-                    {
-                        FirstName = "Служебен",
-                        LastName = "Профил",
-                        Department = "Администрация",
-                        ApplicationUserId = userId
-                    };
-                    _context.Teachers.Add(anyTeacher);
-                    await _context.SaveChangesAsync();
-                }
+                    Name = model.Name,
+                    TeacherId = model.TeacherId
+                };
 
-                subject.TeacherId = anyTeacher.Id;
-
-                _context.Subjects.Add(subject);
-                await _context.SaveChangesAsync();
+                await _subjectService.AddSubjectAsync(subject);
 
                 TempData["SuccessMessage"] = "Предметът е добавен успешно!";
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(subject);
+            ViewBag.Teachers = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "LastName", model.TeacherId);
+            return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null) return NotFound();
-            var subject = await _context.Subjects.FindAsync(id);
+            var subject = await _subjectService.GetSubjectByIdAsync(id);
             if (subject == null) return NotFound();
-            return View(subject);
+
+            var model = new SubjectFormViewModel
+            {
+                Id = subject.Id,
+                Name = subject.Name,
+                TeacherId = subject.TeacherId
+            };
+
+            ViewBag.Teachers = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "LastName", subject.TeacherId);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Subject subject)
+        public async Task<IActionResult> Edit(int id, SubjectFormViewModel model)
         {
-            if (id != subject.Id) return NotFound();
-
-            ModelState.Remove("TeacherId");
-            ModelState.Remove("Teacher");
+            if (id != model.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
-                var anyTeacher = await _context.Teachers.FirstOrDefaultAsync();
 
-                if (anyTeacher == null)
+                var subject = new Subject
                 {
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    anyTeacher = new Teacher
-                    {
-                        FirstName = "Служебен",
-                        LastName = "Профил",
-                        Department = "Администрация",
-                        ApplicationUserId = userId
-                    };
-                    _context.Teachers.Add(anyTeacher);
-                    await _context.SaveChangesAsync();
-                }
+                    Id = model.Id,
+                    Name = model.Name,
+                    TeacherId = model.TeacherId
+                };
 
-                subject.TeacherId = anyTeacher.Id;
+                await _subjectService.UpdateSubjectAsync(subject);
 
-                _context.Update(subject);
-                await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Предметът е коригиран успешно!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(subject);
+
+            ViewBag.Teachers = new SelectList(await _teacherService.GetAllTeachersAsync(), "Id", "LastName", model.TeacherId);
+            return View(model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null) return NotFound();
-            var subject = await _context.Subjects.FindAsync(id);
+            var subject = await _subjectService.GetSubjectByIdAsync(id);
             if (subject == null) return NotFound();
             return View(subject);
         }
@@ -126,13 +123,16 @@ namespace ShkoloASPNETcore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var subject = await _context.Subjects.FindAsync(id);
-            if (subject != null)
+            try
             {
-                _context.Subjects.Remove(subject);
-                await _context.SaveChangesAsync();
+                await _subjectService.DeleteSubjectAsync(id);
                 TempData["SuccessMessage"] = "Предметът е изтрит успешно!";
             }
+            catch (DbUpdateException)
+            {
+                TempData["ErrorMessage"] = "ГРЕШКА: Този предмет не може да бъде изтрит, защото към него има свързани оценки, отсъствия или забележки. Първо изтрийте тях!";
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }

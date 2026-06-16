@@ -95,5 +95,28 @@ namespace ShkoloASPNETcore.Tests
 
             Assert.That(grades, Is.Empty);
         }
+
+        [Test]
+        public async Task GetGradesByStudentIdAsync_ShouldReturnOnlyGradesForThatSpecificStudent()
+        {
+            var subject = new Subject { Name = "Математика" };
+            Context.Subjects.Add(subject);
+
+            var student1 = new Student { FirstName = "Мария", LastName = "Петрова", ApplicationUserId = "u-m1" };
+            var student2 = new Student { FirstName = "Тодор", LastName = "Тодоров", ApplicationUserId = "u-t2" };
+            Context.Students.AddRange(student1, student2);
+            await Context.SaveChangesAsync();
+
+            var grade1 = new Grade { Value = 6.00m, StudentId = student1.Id, SubjectId = subject.Id, Issuer = "Учител", DateIssued = DateTime.Now };
+            var grade2 = new Grade { Value = 4.00m, StudentId = student2.Id, SubjectId = subject.Id, Issuer = "Учител", DateIssued = DateTime.Now };
+            Context.Grades.AddRange(grade1, grade2);
+            await Context.SaveChangesAsync();
+
+            var result = (await _gradeService.GetGradesByStudentIdAsync(student1.Id)).ToList();
+
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result[0].Value, Is.EqualTo(6.00m));
+            Assert.That(result[0].StudentId, Is.EqualTo(student1.Id));
+        }
     }
 }

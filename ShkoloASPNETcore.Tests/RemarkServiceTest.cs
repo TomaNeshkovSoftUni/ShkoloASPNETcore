@@ -46,11 +46,13 @@ namespace ShkoloASPNETcore.Tests
 
             var remark = new Remark
             {
-                Text = "Стабилно поведение в час.",
+                Comment = "Стабилно поведение в час.",
                 Type = RemarkType.Забележка,
                 StudentId = student.Id,
                 SubjectId = subject.Id,
-                DateIssued = DateTime.Now
+                DateIssued = DateTime.Now,
+                Label = "Забележка",
+                Issuer = "Иван Петров"
             };
 
             await _remarkService.AddRemarkAsync(remark);
@@ -58,9 +60,60 @@ namespace ShkoloASPNETcore.Tests
             var remarks = (await _remarkService.GetAllRemarksAsync()).ToList();
 
             Assert.That(remarks.Count, Is.EqualTo(1));
-            Assert.That(remarks[0].Text, Is.EqualTo("Стабилно поведение в час."));
+            Assert.That(remarks[0].Comment, Is.EqualTo("Стабилно поведение в час."));
             Assert.That(remarks[0].StudentId, Is.EqualTo(student.Id));
             Assert.That(remarks[0].SubjectId, Is.EqualTo(subject.Id));
+        }
+
+        [Test]
+        public async Task GetRemarksByStudentIdAsync_ShouldReturnOnlyRemarksForTargetStudent()
+        {
+            var teacherUser = new ApplicationUser { Id = "t-rem-test", UserName = "t@test.bg", Email = "t@test.bg", FirstName = "Учител", LastName = "Учителов" };
+            Context.Users.Add(teacherUser);
+
+            var teacher = new Teacher { FirstName = "Иван", LastName = "Петров", Department = "История", ApplicationUserId = "t-rem-test" };
+            Context.Teachers.Add(teacher);
+            await Context.SaveChangesAsync();
+
+            var subject = new Subject { Name = "История", TeacherId = teacher.Id };
+            Context.Subjects.Add(subject);
+            await Context.SaveChangesAsync();
+
+            var student = new Student { FirstName = "Стефан", LastName = "Стефанов", ApplicationUserId = "u-st" };
+            var otherStudent = new Student { FirstName = "Георги", LastName = "Георгиев", ApplicationUserId = "u-gg" };
+            Context.Students.AddRange(student, otherStudent);
+            await Context.SaveChangesAsync();
+
+            var remark1 = new Remark
+            {
+                Comment = "Отличен проект",
+                StudentId = student.Id,
+                SubjectId = subject.Id,
+                Type = RemarkType.Забележка,
+                Label = "Похвала",
+                DateIssued = DateTime.Now,
+                Issuer = "Иван... Петров"
+            };
+
+            var remark2 = new Remark
+            {
+                Comment = "Няма домашна",
+                StudentId = otherStudent.Id,
+                SubjectId = subject.Id,
+                Type = RemarkType.Забележка,
+                Label = "Забележка",
+                DateIssued = DateTime.Now,
+                Issuer = "Иван Петров"
+            };
+
+            Context.Remarks.AddRange(remark1, remark2);
+            await Context.SaveChangesAsync();
+
+            var result = (await _remarkService.GetRemarksByStudentIdAsync(student.Id)).ToList();
+
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result[0].Comment, Is.EqualTo("Отличен проект"));
+            Assert.That(result[0].StudentId, Is.EqualTo(student.Id));
         }
     }
 }

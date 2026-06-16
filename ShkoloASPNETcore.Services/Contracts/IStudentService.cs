@@ -14,5 +14,6 @@ namespace ShkoloASPNETcore.Services.Contracts
         Task<Student?> GetStudentByIdAsync(int id);
         Task UpdateStudentAsync(Student student);
         Task DeleteStudentAsync(int id);
+        Task<Student?> GetStudentByUserIdAsync(string userId);
     }
 }

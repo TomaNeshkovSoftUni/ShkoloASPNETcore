@@ -2,33 +2,30 @@
 @model ShkoloASPNETcore.Web.Models.RemarkFormViewModel
 
 @{
-    ViewData["Title"] = "Въвеждане на забележка/похвала";
+    ViewData["Title"] = "Редактиране на отзив";
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Нов отзив в дневника</h4>
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">Редактиране на отзив</h4>
                 </div>
                 <div class="card-body p-4">
-                    <form asp-action="Create">
+                    <form asp-action="Edit">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="StudentId" />
 
                         <div class="form-group mb-3">
-                            <label class="form-label font-weight-bold">Изберете ученик</label>
-                            <select asp-for="StudentId" class="form-select" asp-items="ViewBag.Students">
-                                <option value="">-- Изберете ученик --</option>
-                            </select>
-                            <span asp-validation-for="StudentId" class="text-danger"></span>
+                            <label class="form-label font-weight-bold text-muted">Ученик (Не може да се променя)</label>
+                            <select class="form-select" asp-items="ViewBag.Students" disabled="disabled"></select>
                         </div>
 
                         <div class="form-group mb-3">
                             <label class="form-label font-weight-bold">Предмет</label>
-                            <select asp-for="SubjectId" class="form-select" asp-items="ViewBag.Subjects">
-                                <option value="">-- Изберете предмет --</option>
-                            </select>
+                            <select asp-for="SubjectId" class="form-select" asp-items="ViewBag.Subjects"></select>
                             <span asp-validation-for="SubjectId" class="text-danger"></span>
                         </div>
 
@@ -41,20 +38,20 @@
                         <div class="form-group mb-3">
                             <label class="form-label font-weight-bold">Конкретна проява (Фраза)</label>
                             <select asp-for="SelectedText" id="selectedTextSelect" class="form-select">
-                                <option value="">-- Изберете проява --</option>
+                                <option value="@Model.SelectedText">@Model.SelectedText</option>
                             </select>
                             <span asp-validation-for="SelectedText" class="text-danger"></span>
                         </div>
 
                         <div class="form-group mb-3">
                             <label class="form-label font-weight-bold">Допълнителен коментар</label>
-                            <textarea asp-for="Comment" class="form-control" rows="3" placeholder="Въведете детайли (незадължително)..."></textarea>
+                            <textarea asp-for="Comment" class="form-control" rows="3"></textarea>
                             <span asp-validation-for="Comment" class="text-danger"></span>
                         </div>
 
                         <div class="d-flex justify-content-between mt-4">
                             <a asp-action="Index" class="btn btn-secondary">Отказ</a>
-                            <button type="submit" class="btn btn-success">Запиши в дневника</button>
+                            <button type="submit" class="btn btn-warning">Запази промените</button>
                         </div>
                     </form>
                 </div>
@@ -67,17 +64,17 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
     <script>
         const praises = @Json.Serialize(ShkoloASPNETcore.Web.Models.RemarkFormViewModel.Praises);
         const penalties = @Json.Serialize(ShkoloASPNETcore.Web.Models.RemarkFormViewModel.Penalties);
 
         const typeSelect = document.getElementById('remarkTypeSelect');
         const textSelect = document.getElementById('selectedTextSelect');
+        const currentSavedText = "@Model.SelectedText";
 
         function updatePhrases() {
             const selectedType = typeSelect.value;
-            textSelect.innerHTML = '<option value="">-- Изберете проява --</option>';
+            textSelect.innerHTML = '';
 
             const listToUse = (selectedType == "0") ? praises : penalties;
 
@@ -85,6 +82,9 @@
                 const option = document.createElement('option');
                 option.value = phrase;
                 option.textContent = phrase;
+                if(phrase === currentSavedText) {
+                    option.selected = true;
+                }
                 textSelect.appendChild(option);
             });
         }

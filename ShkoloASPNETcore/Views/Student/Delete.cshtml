@@ -1,26 +1,36 @@
 ﻿@model ShkoloASPNETcore.Infrastructure.Data.Models.Student
 
 @{
-    ViewData["Title"] = "Изтриване на ученик";
+    ViewData["Title"] = "Изтриване на Ученик";
 }
 
 <div class="container mt-4">
-    <div class="card border-danger shadow-sm">
-        <div class="card-header bg-danger text-white">
-            <h4 class="mb-0">Потвърждение за изтриване</h4>
-        </div>
-        <div class="card-body">
-            <h5>Сигурни ли сте, че искате да изтриете този запис?</h5>
-            <hr />
-            <dl class="row">
-                <dt class="col-sm-2">Ученик</dt>
-                <dd class="col-sm-10">@Model.FirstName @Model.LastName</dd>
-            </dl>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger shadow">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">⚠️ Потвърждение за изтриване на ученик</h4>
+                </div>
+                <div class="card-body p-4">
+                    <p class="lead text-center">Сигурни ли сте, че искате да изтриете този ученик от базата данни? Това действие ще премахне профила му.</p>
+                    <hr />
 
-            <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
-                <button type="submit" class="btn btn-danger">Да, изтрий</button>
-                <a asp-action="Index" class="btn btn-secondary">Отказ</a>
-            </form>
+                    <div class="mb-3">
+                        <strong>Име на ученика:</strong> <span class="fw-bold fs-5">@Model.FirstName @Model.LastName</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Системно ID:</strong> <span class="text-muted">@Model.Id</span>
+                    </div>
+
+                    <form asp-action="Delete" class="mt-4">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">Отказ</a>
+                            <button type="submit" class="btn btn-danger fw-bold">Да, ИЗТРИЙ УЧЕНИКА</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

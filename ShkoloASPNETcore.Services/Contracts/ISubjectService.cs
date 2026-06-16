@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using ShkoloASPNETcore.Infrastructure.Data.Models;
+﻿using ShkoloASPNETcore.Infrastructure.Data.Models;
 
 namespace ShkoloASPNETcore.Services.Contracts
 {
@@ -11,6 +9,5 @@ namespace ShkoloASPNETcore.Services.Contracts
         Task AddSubjectAsync(Subject subject);
         Task UpdateSubjectAsync(Subject subject);
         Task DeleteSubjectAsync(int id);
-        Task<bool> SubjectExistsAsync(int id);
     }
 }

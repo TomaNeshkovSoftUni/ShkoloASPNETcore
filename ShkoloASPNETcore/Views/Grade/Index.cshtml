@@ -38,7 +38,7 @@
                 <tr>
                     <td>@item.Student?.FirstName @item.Student?.LastName</td>
                     <td>@item.Subject?.Name</td>
-                    <td>@item.Subject?.Teacher?.FirstName @item.Subject?.Teacher?.LastName</td>
+                    <td>@item.Issuer</td>
                     <td class="fw-bold text-dark">@item.Value</td>
                     <td>@item.DateIssued.ToString("dd.MM.yyyy")</td>
                     @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))

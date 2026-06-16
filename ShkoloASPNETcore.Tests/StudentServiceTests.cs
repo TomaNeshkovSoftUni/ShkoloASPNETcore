@@ -40,5 +40,45 @@ namespace ShkoloASPNETcore.Tests
             Assert.That(students.Count(), Is.EqualTo(1));
             Assert.That(students.First().FirstName, Is.EqualTo("Тест"));
         }
+
+        [Test]
+        public async Task GetStudentByUserIdAsync_ShouldReturnCorrectStudent_WhenUserExists()
+        {
+            var userId = "user-stud-123";
+            var student = new Student { FirstName = "Алекс", LastName = "Попов", ApplicationUserId = userId };
+            Context.Students.Add(student);
+            await Context.SaveChangesAsync();
+
+            var result = await _studentService.GetStudentByUserIdAsync(userId);
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.FirstName, Is.EqualTo("Алекс"));
+        }
+
+        [Test]
+        public async Task GetStudentByIdAsync_ShouldReturnCorrectStudent()
+        {
+            var student = new Student { FirstName = "Елена", LastName = "Георгиева", ApplicationUserId = "u-el" };
+            Context.Students.Add(student);
+            await Context.SaveChangesAsync();
+
+            var result = await _studentService.GetStudentByIdAsync(student.Id);
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.LastName, Is.EqualTo("Георгиева"));
+        }
+
+        [Test]
+        public async Task DeleteStudentAsync_ShouldRemoveStudentFromDb()
+        {
+            var student = new Student { FirstName = "За Изтриване", LastName = "Ученик", ApplicationUserId = "u-del" };
+            Context.Students.Add(student);
+            await Context.SaveChangesAsync();
+
+            await _studentService.DeleteStudentAsync(student.Id);
+            var result = await _studentService.GetStudentByIdAsync(student.Id);
+
+            Assert.That(result, Is.Null);
+        }
     }
 }
