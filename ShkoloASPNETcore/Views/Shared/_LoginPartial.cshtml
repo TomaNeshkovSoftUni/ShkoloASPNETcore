@@ -1,31 +1,46 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using ShkoloASPNETcore.Infrastructure.Data.Models
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+﻿<style>
+    .logout-btn {
+        background: none;
+        border: none;
+        color: #ffffff;
+        font-size: 1rem;
+        cursor: pointer;
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.5;
+        transition: none !important;
+    }
 
-<ul class="navbar-nav align-items-center">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <li class="nav-item me-3">
-            <span class="text-secondary small">
-                <i class="bi bi-person-circle me-1"></i> @User.Identity?.Name
-            </span>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="btn btn-sm btn-outline-danger px-3 py-1 rounded-pill">
-                    <i class="bi bi-box-arrow-right"></i> Изход
-                </button>
-            </form>
-        </li>
+        .logout-btn:hover {
+            background-color: #3979B2 !important;
+            opacity: 1;
+        }
+
+        .logout-btn i {
+            transition: none !important;
+        }
+
+    .nav-user-section {
+        display: flex;
+        align-items: center;
     }
-    else
-    {
-        <li class="nav-item me-2">
-            <a class="btn btn-sm btn-light px-3 py-1 rounded-pill border text-dark" asp-area="Identity" asp-page="/Account/Login">Вход</a>
-        </li>
-        <li class="nav-item">
-            <a class="btn btn-sm btn-primary px-3 py-1 rounded-pill text-white" asp-area="Identity" asp-page="/Account/Register">Регистрация</a>
-        </li>
-    }
-</ul>
+</style>
+
+<div class="nav-user-section">
+    <span class="text-white small me-3">
+        @User.Identity?.Name
+    </span>
+
+    <form asp-area="Identity"
+          asp-page="/Account/Logout"
+          asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+          class="d-inline">
+
+        <button type="submit" class="logout-btn" title="Изход">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
+    </form>
+</div>
