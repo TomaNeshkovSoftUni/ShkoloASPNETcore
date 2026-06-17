@@ -69,13 +69,58 @@ namespace ShkoloASPNETcore.Web.Controllers
             if (ModelState.IsValid)
             {
                 await _absenceService.AddAbsenceAsync(absence);
-                TempData["SuccessMessage"] = "Отсъствието е добавено успешно!";
+                TempData["SuccessMessage"] = "Записът е добавен успешно!";
                 return RedirectToAction(nameof(Index));
             }
 
             ViewBag.Students = new SelectList(await _studentService.GetAllStudentsAsync(), "Id", "LastName", absence.StudentId);
             ViewBag.Subjects = new SelectList(await _subjectService.GetAllSubjectsAsync(), "Id", "Name", absence.SubjectId);
             return View(absence);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Teacher,Administrator")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var absence = await _absenceService.GetAbsenceByIdAsync(id);
+            if (absence == null) return NotFound();
+
+            return View(absence);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher,Administrator")]
+        public async Task<IActionResult> Edit(int id, Absence model)
+        {
+            if (id != model.Id) return NotFound();
+
+            ModelState.Remove("Student");
+            ModelState.Remove("Subject");
+
+            if (ModelState.IsValid)
+            {
+                var absence = await _absenceService.GetAbsenceByIdAsync(id);
+                if (absence == null) return NotFound();
+
+                absence.Type = model.Type;
+
+                await _absenceService.UpdateAbsenceAsync(absence);
+                TempData["SuccessMessage"] = "Статусът беше коригиран успешно!";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher,Administrator")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _absenceService.DeleteAbsenceAsync(id);
+            TempData["SuccessMessage"] = "Отсъствието беше изтрито успешно!";
+            return RedirectToAction(nameof(Index));
         }
     }
 }

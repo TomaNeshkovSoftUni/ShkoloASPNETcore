@@ -6,130 +6,207 @@
     <title>@ViewData["Title"] - Shkolo</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ShkoloASPNETcore.styles.css" asp-append-version="true" />
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background-color: #f4f6f9;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #eef0f5;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
         }
-        /* Shkolo Sidebar Styles */
+
+        .app-shell {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ── Sidebar ── */
         .shkolo-sidebar {
-            background-color: #1e2235;
-            min-width: 250px;
-            max-width: 250px;
-            min-height: 100vh;
-            color: #b2b7c6;
-            transition: all 0.3s;
+            width: 235px;
+            min-width: 235px;
+            background-color: #4276A4;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            z-index: 100;
         }
 
-            .shkolo-sidebar .brand-area {
-                background-color: #161929;
-                padding: 1.5rem;
-                font-size: 1.4rem;
-                font-weight: 700;
-                letter-spacing: 1px;
-            }
+        .sidebar-brand {
+            height: 50px;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #2D5F8B;
+        }
 
-                .shkolo-sidebar .brand-area a {
-                    color: #ffffff !important;
-                    text-decoration: none;
-                }
+        .brand-logo-img {
+            width: 169px;
+            height: auto;
+        }
 
-            .shkolo-sidebar .brand-dot {
-                color: #00d27a;
-            }
+        .sidebar-brand-name {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
 
         .shkolo-nav-link {
-            color: #b2b7c6;
-            padding: 0.8rem 1.5rem;
+            color: #a8b8cc;
+            padding: 12px 20px;
             display: flex;
             align-items: center;
             gap: 12px;
             text-decoration: none;
-            transition: all 0.2s;
+            font-size: 0.875rem;
             font-weight: 500;
+            border-left: 4px solid transparent;
+            border-bottom: 1px solid #4A83B6;
+            white-space: nowrap;
         }
 
             .shkolo-nav-link:hover {
                 color: #ffffff;
-                background-color: #262b42;
+                background-color: #497FAE;
             }
-
             .shkolo-nav-link.active-menu {
                 color: #ffffff;
-                background-color: #303755;
-                border-left: 4px solid #00d27a;
+                background-color: #D64635;
             }
 
             .shkolo-nav-link i {
-                font-size: 1.2rem;
+                font-size: 1rem;
+                width: 18px;
+                text-align: center;
             }
 
-        .main-wrapper {
+        .sidebar-footer {
+            padding: 12px 16px;
+            color: #4e657e;
+            font-size: 0.7rem;
+            border-top: 1px solid #3a6288;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .main-panel {
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
             min-width: 0;
         }
 
         .shkolo-topbar {
-            background-color: #ffffff;
-            height: 70px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            background-color: #2D5F8B;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
         }
 
-        @@media (max-width: 768px) {
-            .shkolo-sidebar {
-                display: none; /* Can be enhanced with JS toggle later if needed */
-            }
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 22px 24px;
+            background-color: #eef0f5;
+        }
+
+        .content-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            padding: 24px;
+        }
+
+        .shkolo-footer {
+            background-color: #234668;
+            color: #4e657e;
+            font-size: 0.72rem;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
 <body>
 
-    <div class="d-flex">
-        <aside class="shkolo-sidebar d-flex flex-column">
-            <div class="brand-area text-center border-bottom border-dark">
-                <a asp-controller="Home" asp-action="Index">
-                    shkolo<span class="brand-dot">.</span>
+    <div class="app-shell">
+        <aside class="shkolo-sidebar">
+            <a class="sidebar-brand" asp-controller="Home" asp-action="Index">
+                <img src="https://app.shkolo.bg/img/bg/shkolo_classbook_logo.svg" alt="Shkolo" class="brand-logo-img" />
+            </a>
+
+            <nav class="flex-grow-1 py-2">
+                @* global *@
+                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active-menu" : "")"
+                   asp-controller="Home" asp-action="Index">
+                    <i class="fa fa-home"></i> Начало
                 </a>
-            </div>
-            <nav class="flex-grow-1 mt-3">
-                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active-menu" : "")" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-speedometer2"></i> Табло / Начало
+
+                @* admin/teacher only *@
+                @if (!User.IsInRole("Student"))
+                {
+                    <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Student" ? "active-menu" : "")"
+                       asp-controller="Student" asp-action="Index">
+                        <i class="fa fa-running"></i> Ученици
+                    </a>
+
+                    <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Teacher" ? "active-menu" : "")"
+                       asp-controller="Teacher" asp-action="Index">
+                        <i class="fa fa-graduation-cap"></i> Учители
+                    </a>
+
+                    <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Subject" ? "active-menu" : "")"
+                       asp-controller="Subject" asp-action="Index">
+                        <i class="fa fa-book"></i> Предмети
+                    </a>
+                }
+
+                @* students only *@
+                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Grade" ? "active-menu" : "")"
+                   asp-controller="Grade" asp-action="Index">
+                    <i class="fa fa-chart-line"></i> Оценки
                 </a>
-                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Student" ? "active-menu" : "")" asp-controller="Student" asp-action="Index">
-                    <i class="bi bi-people"></i> Ученици
+
+                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Absence" ? "active-menu" : "")"
+                   asp-controller="Absence" asp-action="Index">
+                    <i class="fa-solid fa-address-book"></i> Отсъствия
                 </a>
-                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Teacher" ? "active-menu" : "")" asp-controller="Teacher" asp-action="Index">
-                    <i class="bi bi-person-badge"></i> Учители
-                </a>
-                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Subject" ? "active-menu" : "")" asp-controller="Subject" asp-action="Index">
-                    <i class="bi bi-book"></i> Предмети
-                </a>
-                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Grade" ? "active-menu" : "")" asp-controller="Grade" asp-action="Index">
-                    <i class="bi bi-journal-check"></i> Оценки
-                </a>
-                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Absence" ? "active-menu" : "")" asp-controller="Absence" asp-action="Index">
-                    <i class="bi bi-calendar-x"></i> Отсъствия
-                </a>
-                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Remark" ? "active-menu" : "")" asp-controller="Remark" asp-action="Index">
-                    <i class="bi bi-exclamation-triangle"></i> Забележки
+
+                <a class="shkolo-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Remark" ? "active-menu" : "")"
+                   asp-controller="Remark" asp-action="Index">
+                    <i class="fa fa-spell-check"></i> Забележки
                 </a>
             </nav>
-            <div class="p-3 text-center small text-muted border-top border-dark">
-                Система v10.0
-            </div>
         </aside>
 
-        <div class="main-wrapper d-flex flex-column">
-            <header class="shkolo-topbar d-flex align-items-center justify-content-end px-4">
-                <partial name="_LoginPartial" />
+        <div class="main-panel">
+            <header class="shkolo-topbar">
+                <div class="text-white fw-bold">SHKOLO Платформа</div>
+                <div class="topbar-right">
+                    <partial name="_LoginPartial" />
+                </div>
             </header>
 
-            <main class="container-fluid p-4 flex-grow-1">
+            <main class="main-content">
                 @if (TempData["SuccessMessage"] != null)
                 {
                     <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
@@ -137,23 +214,20 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 }
-
-                <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
+                <div class="content-card">
                     @RenderBody()
                 </div>
             </main>
 
-            <footer class="bg-white border-top py-3 px-4 text-muted small">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>&copy; 2026 - SHKOLO Платформа</div>
-                    <div><a asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-muted">Поверителност</a></div>
-                </div>
+            <footer class="shkolo-footer">
+                <div>&copy; 2026 – SHKOLO Платформа</div>
+                <a asp-controller="Home" asp-action="Privacy" class="text-decoration-none">Поверителност</a>
             </footer>
         </div>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmxc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

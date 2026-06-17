@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ShkoloASPNETcore.Core.Services.Contracts;
 using ShkoloASPNETcore.Infrastructure.Data;
@@ -22,6 +21,7 @@ namespace ShkoloASPNETcore.Services
             return await _context.Absences
                 .Include(a => a.Student)
                 .Include(a => a.Subject)
+                .Include(a => a.Subject.Teacher)
                 .ToListAsync();
         }
 
@@ -29,6 +29,30 @@ namespace ShkoloASPNETcore.Services
         {
             await _context.Absences.AddAsync(absence);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Absence?> GetAbsenceByIdAsync(int id)
+        {
+            return await _context.Absences
+                .Include(a => a.Student)
+                .Include(a => a.Subject)
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task UpdateAbsenceAsync(Absence absence)
+        {
+            _context.Absences.Update(absence);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAbsenceAsync(int id)
+        {
+            var absence = await _context.Absences.FindAsync(id);
+            if (absence != null)
+            {
+                _context.Absences.Remove(absence);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShkoloASPNETcore.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using ShkoloASPNETcore.Infrastructure.Data;
 namespace ShkoloASPNETcore.Infrastructure.Migrations
 {
     [DbContext(typeof(ShkoloDbContext))]
-    partial class ShkoloDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260617124701_SeedTeacherAccount")]
+    partial class SeedTeacherAccount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,7 +323,7 @@ namespace ShkoloASPNETcore.Infrastructure.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+                            ConcurrencyStamp = "0f833963-9952-4d9a-b07d-58ea98792170",
                             Email = "teacher@shkolo.bg",
                             EmailConfirmed = true,
                             FirstName = "John",
@@ -330,7 +333,7 @@ namespace ShkoloASPNETcore.Infrastructure.Migrations
                             NormalizedUserName = "TEACHER@SHKOLO.BG",
                             PasswordHash = "AQAAAAIAAYagAAAAEMYY7s8/3kAKgky4q0Hm0M2JQQf3mUbWgYv3jF9+G7EYpYiw7kyaYc9IAQ5PDsF1TQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f3a4b5c6-d7e8-4f9a-8b0c-1d2e3f4a5b6c",
+                            SecurityStamp = "e9aac740-a816-4e7d-abde-56187d3a16f0",
                             TwoFactorEnabled = false,
                             UserName = "teacher@shkolo.bg"
                         });
@@ -495,16 +498,6 @@ namespace ShkoloASPNETcore.Infrastructure.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Teachers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ApplicationUserId = "2",
-                            Department = "Математика",
-                            FirstName = "John",
-                            LastName = "Teacher"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

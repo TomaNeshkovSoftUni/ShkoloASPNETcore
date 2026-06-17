@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShkoloASPNETcore.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using ShkoloASPNETcore.Infrastructure.Data;
 namespace ShkoloASPNETcore.Infrastructure.Migrations
 {
     [DbContext(typeof(ShkoloDbContext))]
-    partial class ShkoloDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260617125709_FixDataSeedingFinally")]
+    partial class FixDataSeedingFinally
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -495,16 +498,6 @@ namespace ShkoloASPNETcore.Infrastructure.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Teachers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ApplicationUserId = "2",
-                            Department = "Математика",
-                            FirstName = "John",
-                            LastName = "Teacher"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

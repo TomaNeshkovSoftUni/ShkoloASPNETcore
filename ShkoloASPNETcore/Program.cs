@@ -60,8 +60,9 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<ShkoloASPNETcore.Infrastructure.Data.Models.ApplicationUser>();
-var myNewHash = hasher.HashPassword(new ShkoloASPNETcore.Infrastructure.Data.Models.ApplicationUser(), "Admin123!");
-Console.WriteLine($"{myNewHash}");
+var AdminAccHash = hasher.HashPassword(new ShkoloASPNETcore.Infrastructure.Data.Models.ApplicationUser(), "Admin123!");
+var teacherAccHash = hasher.HashPassword(new ShkoloASPNETcore.Infrastructure.Data.Models.ApplicationUser(), "Teacher123!");
+Console.WriteLine($"Admin pass - {AdminAccHash}\n Teacher pass - {teacherAccHash}");
 
 app.Run();
 

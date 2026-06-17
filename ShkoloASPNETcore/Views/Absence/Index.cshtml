@@ -12,31 +12,50 @@
         }
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead>
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
             <tr>
                 <th>УЧЕНИК</th>
                 <th>ПРЕДМЕТ</th>
                 <th>УЧИТЕЛ</th>
                 <th>ТИП</th>
                 <th>ДАТА</th>
+                @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
+                {
+                    <th style="width: 220px;" class="text-center">ДЕЙСТВИЯ</th>
+                }
             </tr>
         </thead>
         <tbody>
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="5" class="text-center p-3">Няма намерени отсъствия.</td>
+                    <td colspan="@(User.IsInRole("Teacher") || User.IsInRole("Administrator") ? "6" : "5")" class="text-center p-3">Няма намерени отсъствия.</td>
                 </tr>
             }
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Student?.FirstName @item.Student?.LastName</td>
+                    <td class="fw-bold text-dark">@item.Student?.FirstName @item.Student?.LastName</td>
                     <td>@item.Subject?.Name</td>
                     <td>@item.Subject?.Teacher?.FirstName @item.Subject?.Teacher?.LastName</td>
-                    <td><span class="badge bg-dark rounded-0">@item.Type.ToString()</span></td>
+                    <td>
+                        <span class="badge @(item.Type.ToString() == "Закъснение" ? "bg-warning text-dark" : "bg-danger") rounded-0">
+                            @item.Type.ToString()
+                        </span>
+                    </td>
                     <td>@item.DateIssued.ToString("dd.MM.yyyy")</td>
+                    @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
+                    {
+                        <td class="text-center">
+                            <div class="d-flex gap-1 justify-content-center">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark">КОРИГИРАЙ</a>
+                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Наистина ли искате да изтриете този запис?');" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger">ИЗТРИЙ</button>
+                                </form>
+                            </div>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

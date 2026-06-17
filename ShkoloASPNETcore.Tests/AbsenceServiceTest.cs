@@ -46,7 +46,7 @@ namespace ShkoloASPNETcore.Tests
 
             var absence = new Absence
             {
-                Type = AbsenceType.Неизвинено,
+                Type = AbsenceType.Закъснение,
                 StudentId = student.Id,
                 SubjectId = subject.Id,
                 DateIssued = DateTime.Now
@@ -56,7 +56,7 @@ namespace ShkoloASPNETcore.Tests
             var absences = (await _absenceService.GetAllAbsencesAsync()).ToList();
 
             Assert.That(absences.Count, Is.EqualTo(1));
-            Assert.That(absences[0].Type, Is.EqualTo(AbsenceType.Неизвинено));
+            Assert.That(absences[0].Type, Is.EqualTo(AbsenceType.Закъснение));
             Assert.That(absences[0].StudentId, Is.EqualTo(student.Id));
             Assert.That(absences[0].SubjectId, Is.EqualTo(subject.Id));
         }

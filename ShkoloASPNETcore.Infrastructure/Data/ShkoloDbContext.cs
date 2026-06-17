@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +22,8 @@ namespace ShkoloASPNETcore.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
             builder.Entity<ApplicationUser>().ToTable("Users");
             builder.Entity<IdentityRole>().ToTable("Roles");
             builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
@@ -31,8 +31,6 @@ namespace ShkoloASPNETcore.Infrastructure.Data
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
-
-            base.OnModelCreating(builder);
 
             builder.Entity<Grade>()
                 .HasOne(g => g.Subject)
@@ -52,18 +50,36 @@ namespace ShkoloASPNETcore.Infrastructure.Data
                 .HasForeignKey(r => r.SubjectId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // seed roles and admin user
             string adminRoleId = "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d";
             string teacherRoleId = "b2c3d4e5-f67a-8b9c-0d1e-2f3a4b5c6d7e";
             string studentRoleId = "c3d4e5f6-7a8b-9c0d-1e2f-3a4b5c6d7e8f";
 
             builder.Entity<IdentityRole>().HasData(
-                new IdentityRole { Id = adminRoleId, Name = "Administrator", NormalizedName = "ADMINISTRATOR", ConcurrencyStamp = "55122ea8-6932-474d-96eb-f6e80b4dbdf4" },
-                new IdentityRole { Id = teacherRoleId, Name = "Teacher", NormalizedName = "TEACHER", ConcurrencyStamp = "03df52f8-5813-40fa-80e2-6cf7d8d21b7a" },
-                new IdentityRole { Id = studentRoleId, Name = "Student", NormalizedName = "STUDENT", ConcurrencyStamp = "94bf82fa-2613-41fa-90e2-6cf7d8d21b7b" }
+                new IdentityRole
+                {
+                    Id = adminRoleId,
+                    Name = "Administrator",
+                    NormalizedName = "ADMINISTRATOR",
+                    ConcurrencyStamp = "55122ea8-6932-474d-96eb-f6e80b4dbdf4"
+                },
+                new IdentityRole
+                {
+                    Id = teacherRoleId,
+                    Name = "Teacher",
+                    NormalizedName = "TEACHER",
+                    ConcurrencyStamp = "03df52f8-5813-40fa-80e2-6cf7d8d21b7a"
+                },
+                new IdentityRole
+                {
+                    Id = studentRoleId,
+                    Name = "Student",
+                    NormalizedName = "STUDENT",
+                    ConcurrencyStamp = "94bf82fa-2613-41fa-90e2-6cf7d8d21b7b"
+                }
             );
 
             string adminUserId = "1";
+
             var adminUser = new ApplicationUser
             {
                 Id = adminUserId,
@@ -81,11 +97,48 @@ namespace ShkoloASPNETcore.Infrastructure.Data
 
             builder.Entity<ApplicationUser>().HasData(adminUser);
 
-            builder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            string teacherUserId = "2";
+
+            var teacherUser = new ApplicationUser
             {
-                RoleId = adminRoleId,
-                UserId = adminUserId
-            });
+                Id = teacherUserId,
+                UserName = "teacher@shkolo.bg",
+                NormalizedUserName = "TEACHER@SHKOLO.BG",
+                Email = "teacher@shkolo.bg",
+                NormalizedEmail = "TEACHER@SHKOLO.BG",
+                EmailConfirmed = true,
+                FirstName = "John",
+                LastName = "Teacher",
+                PasswordHash = "AQAAAAIAAYagAAAAEMYY7s8/3kAKgky4q0Hm0M2JQQf3mUbWgYv3jF9+G7EYpYiw7kyaYc9IAQ5PDsF1TQ==",
+                SecurityStamp = "f3a4b5c6-d7e8-4f9a-8b0c-1d2e3f4a5b6c",
+                ConcurrencyStamp = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d"
+            };
+
+            builder.Entity<ApplicationUser>().HasData(teacherUser);
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>
+                {
+                    UserId = adminUserId,
+                    RoleId = adminRoleId
+                },
+                new IdentityUserRole<string>
+                {
+                    UserId = teacherUserId,
+                    RoleId = teacherRoleId
+                }
+            );
+
+            builder.Entity<Teacher>().HasData(
+                new Teacher
+                {
+                    Id = 1,
+                    FirstName = "John",
+                    LastName = "Teacher",
+                    Department = "Математика",
+                    ApplicationUserId = teacherUserId
+                }
+            );
         }
     }
 }

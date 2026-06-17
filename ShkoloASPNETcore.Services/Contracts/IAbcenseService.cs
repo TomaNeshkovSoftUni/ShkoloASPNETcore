@@ -8,5 +8,8 @@ namespace ShkoloASPNETcore.Core.Services.Contracts
     {
         Task<IEnumerable<Absence>> GetAllAbsencesAsync();
         Task AddAbsenceAsync(Absence absence);
+        Task<Absence?> GetAbsenceByIdAsync(int id);
+        Task UpdateAbsenceAsync(Absence absence);
+        Task DeleteAbsenceAsync(int id);
     }
 }

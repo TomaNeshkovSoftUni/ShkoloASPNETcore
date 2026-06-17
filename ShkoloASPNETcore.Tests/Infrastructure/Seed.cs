@@ -43,7 +43,7 @@ internal static class Seed
         {
             StudentId = studentId,
             SubjectId = subjectId,
-            Type = AbsenceType.Извинено,
+            Type = AbsenceType.Отсъствие,
             DateIssued = DateTime.Now
         };
 

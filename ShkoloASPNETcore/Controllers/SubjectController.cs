@@ -27,6 +27,7 @@ namespace ShkoloASPNETcore.Web.Controllers
             return View(subjects);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -45,13 +46,13 @@ namespace ShkoloASPNETcore.Web.Controllers
             return View(subject);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SubjectFormViewModel model)
         {
             if (ModelState.IsValid)
             {
-
                 var subject = new Subject
                 {
                     Name = model.Name,
@@ -68,6 +69,7 @@ namespace ShkoloASPNETcore.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -85,6 +87,7 @@ namespace ShkoloASPNETcore.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, SubjectFormViewModel model)
@@ -93,7 +96,6 @@ namespace ShkoloASPNETcore.Web.Controllers
 
             if (ModelState.IsValid)
             {
-
                 var subject = new Subject
                 {
                     Id = model.Id,
@@ -111,6 +113,7 @@ namespace ShkoloASPNETcore.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -119,6 +122,7 @@ namespace ShkoloASPNETcore.Web.Controllers
             return View(subject);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

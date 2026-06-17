@@ -6,8 +6,7 @@ namespace ShkoloASPNETcore.Infrastructure.Data.Enums
 {
     public enum AbsenceType
     {
-        Неизвинено,
-        Извинено,
+        Отсъствие,
         Закъснение
     }
 }
