@@ -4,33 +4,86 @@
     ViewData["Title"] = "Изтриване на Ученик";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card border-danger shadow">
-                <div class="card-header bg-danger text-white">
-                    <h4 class="mb-0">⚠️ Потвърждение за изтриване на ученик</h4>
-                </div>
-                <div class="card-body p-4">
-                    <p class="lead text-center">Сигурни ли сте, че искате да изтриете този ученик от базата данни? Това действие ще премахне профила му.</p>
-                    <hr />
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
 
-                    <div class="mb-3">
-                        <strong>Име на ученика:</strong> <span class="fw-bold fs-5">@Model.FirstName @Model.LastName</span>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Системно ID:</strong> <span class="text-muted">@Model.Id</span>
-                    </div>
+    .alert-danger-custom {
+        background-color: #fff;
+        border: 1px solid #E7505A;
+        color: #E7505A;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
 
-                    <form asp-action="Delete" class="mt-4">
-                        <input type="hidden" asp-for="Id" />
-                        <div class="d-flex justify-content-between">
-                            <a asp-action="Index" class="btn btn-secondary">Отказ</a>
-                            <button type="submit" class="btn btn-danger fw-bold">Да, ИЗТРИЙ УЧЕНИКА</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    .card-custom {
+        border: 1px solid #E7505A;
+        padding: 20px;
+        max-width: 600px;
+    }
+
+    .info-row {
+        margin-bottom: 10px;
+        display: flex;
+    }
+
+    .info-label {
+        color: #333;
+        width: 150px;
+        display: inline-block;
+    }
+
+    .info-value {
+        color: #333;
+    }
+
+    .val-danger {
+        color: #E7505A;
+    }
+
+    .btn-delete {
+        background-color: #E7505A;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-cancel {
+        background-color: #eee;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 8px 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+</style>
+
+<div class="container mt-4 bare-bones">
+    <div class="alert-danger-custom">
+        <i class="fas fa-exclamation-triangle"></i> СИГУРНИ ЛИ СТЕ, ЧЕ ИСКАТЕ ДА ИЗТРИЕТЕ ТОЗИ УЧЕНИК? ТОВА ДЕЙСТВИЕ ЩЕ ПРЕМАХНЕ ПРОФИЛА МУ.
+    </div>
+
+    <div class="card-custom">
+        <div class="info-row">
+            <span class="info-label">Име на ученика:</span>
+            <span class="info-value val-danger">@Model.FirstName @Model.LastName</span>
         </div>
+        <div class="info-row">
+            <span class="info-label">Системно ID:</span>
+            <span class="info-value">@Model.Id</span>
+        </div>
+
+        <form asp-action="Delete" method="post" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: flex; justify-content: space-between;">
+            <input type="hidden" asp-for="Id" />
+            <a asp-action="Index" class="btn-cancel"><i class="fas fa-arrow-left"></i> Отказ</a>
+            <button type="submit" class="btn-delete"><i class="fas fa-trash"></i> ДА, ИЗТРИЙ УЧЕНИКА</button>
+        </form>
     </div>
 </div>

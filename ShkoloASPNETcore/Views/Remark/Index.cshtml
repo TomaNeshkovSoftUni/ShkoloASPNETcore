@@ -4,25 +4,101 @@
     ViewData["Title"] = "Забележки и Похвали";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-end mb-3 border-bottom border-dark pb-2">
-        <h2 class="m-0 text-uppercase fw-bold">Дневник на отзивите</h2>
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        text-transform: none !important;
+    }
+
+    .shkolo-header {
+        background-color: #3979B2;
+        color: white;
+        padding: 10px;
+    }
+
+    .btn-shkolo {
+        background-color: #3979B2;
+        color: white;
+        border: none;
+        padding: 5px 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-shkolo:hover {
+            color: white;
+            background-color: #2b5c8a;
+        }
+
+    .btn-edit {
+        background-color: #C49F47;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        text-decoration: none;
+    }
+
+    .btn-delete {
+        background-color: #E7505A;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        text-decoration: none;
+    }
+
+    .badge-praise {
+        background-color: #C49F47;
+        color: white;
+        padding: 5px;
+        display: inline-block;
+    }
+
+    .badge-penalty {
+        background-color: #E7505A;
+        color: white;
+        padding: 5px;
+        display: inline-block;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #3979B2;
+        color: white;
+    }
+</style>
+
+<div class="container mt-4 bare-bones">
+    <div class="d-flex justify-content-between align-items-center mb-3" style="border-bottom: 2px solid #3979B2; padding-bottom: 10px;">
+        <h2 style="margin: 0; font-size: 24px; color: #3979B2;">Дневник на отзивите</h2>
         @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
         {
-            <a asp-action="Create" class="btn btn-dark">ДОБАВИ ОТЗИВ</a>
+            <a asp-action="Create" class="btn-shkolo">ДОБАВИ ОТЗИВ</a>
         }
     </div>
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div style="background-color: #C49F47; color: white; padding: 10px; margin-bottom: 15px;">
             @TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
-    <table class="table table-bordered table-striped align-middle">
-        <thead class="table-dark">
+    <table>
+        <thead>
             <tr>
                 <th>УЧЕНИК</th>
                 <th>ПРЕДМЕТ</th>
@@ -32,7 +108,7 @@
                 <th>ДАТА</th>
                 @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
                 {
-                    <th class="text-center">ДЕЙСТВИЯ</th>
+                    <th style="text-align: center;">ДЕЙСТВИЯ</th>
                 }
             </tr>
         </thead>
@@ -40,40 +116,38 @@
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="7" class="text-center p-3 text-muted">Няма намерени забележки или похвали.</td>
+                    <td colspan="7" style="text-align: center; padding: 15px; color: #666;">Няма намерени забележки или похвали.</td>
                 </tr>
             }
             @foreach (var item in Model)
             {
                 <tr>
-                    <td><strong>@item.Student?.FirstName @item.Student?.LastName</strong></td>
+                    <td>@item.Student?.FirstName @item.Student?.LastName</td>
                     <td>@item.Subject?.Name</td>
                     <td>
                         @if (item.Type == RemarkType.Похвала)
                         {
-                            <span class="badge bg-success text-uppercase p-2">Похвала</span>
+                            <span class="badge-praise">Похвала</span>
                         }
                         else
                         {
-                            <span class="badge bg-danger text-uppercase p-2">Забележка</span>
+                            <span class="badge-penalty">Забележка</span>
                         }
                     </td>
                     <td>
-                        <div class="fw-bold text-primary">@item.Label</div>
+                        <div style="color: #3979B2;">@item.Label</div>
                         @if (!string.IsNullOrEmpty(item.Comment))
                         {
-                            <small class="text-muted d-block mt-1"><em>Коментар: @item.Comment</em></small>
+                            <div style="color: #666; font-size: 12px; margin-top: 5px;">Коментар: @item.Comment</div>
                         }
                     </td>
-                    <td><small>@item.Issuer</small></td>
+                    <td>@item.Issuer</td>
                     <td>@item.DateIssued.ToString("dd.MM.yyyy")</td>
                     @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
                     {
-                        <td class="text-center">
-                            <div class="btn-group btn-group-sm" role="group">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">Редакция</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Изтрий</a>
-                            </div>
+                        <td style="text-align: center;">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn-edit">Редакция</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn-delete">Изтрий</a>
                         </td>
                     }
                 </tr>

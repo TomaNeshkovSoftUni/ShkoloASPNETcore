@@ -4,37 +4,105 @@
     ViewData["Title"] = "Редактиране на Оценка";
 }
 
-<div class="container mt-4">
-    <h2 class="text-uppercase fw-bold border-bottom border-dark pb-2 mb-4">Редактиране на Оценка</h2>
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
 
-    <div class="card p-4 shadow-sm" style="max-width: 600px;">
+    .header-gold {
+        color: #C49F47;
+        font-size: 24px;
+        border-bottom: 2px solid #C49F47;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        margin-top: 0;
+    }
+
+    .card-custom {
+        border: 1px solid #C49F47;
+        padding: 20px;
+        max-width: 600px;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #ccc;
+        padding: 8px;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .form-label {
+        color: #3979B2;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .btn-save {
+        background-color: #C49F47;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-cancel {
+        background-color: #eee;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 8px 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .text-danger {
+        color: #E7505A !important;
+        font-size: 14px;
+    }
+
+    .text-muted-custom {
+        color: #666;
+        font-size: 12px;
+        display: block;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="container mt-4 bare-bones">
+    <h2 class="header-gold">Редактиране на Оценка</h2>
+
+    <div class="card-custom">
         <form asp-action="Edit" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-bold"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="DateIssued" />
 
-            <div class="mb-3">
-                <label asp-for="StudentId" class="form-label fw-bold">Ученик</label>
-                <select asp-for="StudentId" class="form-select" asp-items="ViewBag.StudentId" disabled></select>
+            <div class="mb-3" style="margin-bottom: 15px;">
+                <label asp-for="StudentId" class="form-label">Ученик</label>
+                <select asp-for="StudentId" class="form-select" asp-items="ViewBag.StudentId" disabled style="background-color: #f9f9f9;"></select>
                 <input type="hidden" asp-for="StudentId" />
-                <span class="form-text text-muted">Предметът и ученикът не могат да бъдат променяни след създаване.</span>
+                <span class="text-muted-custom">Предметът и ученикът не могат да бъдат променяни след създаване.</span>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="SubjectId" class="form-label fw-bold">Предмет</label>
-                <select asp-for="SubjectId" class="form-select" asp-items="ViewBag.SubjectId" disabled></select>
+            <div class="mb-3" style="margin-bottom: 15px;">
+                <label asp-for="SubjectId" class="form-label">Предмет</label>
+                <select asp-for="SubjectId" class="form-select" asp-items="ViewBag.SubjectId" disabled style="background-color: #f9f9f9;"></select>
                 <input type="hidden" asp-for="SubjectId" />
             </div>
 
-            <div class="mb-4">
-                <label asp-for="Value" class="form-label fw-bold">Оценка</label>
-                <input asp-for="Value" class="form-control border-dark" type="text" />
+            <div class="mb-4" style="margin-bottom: 20px;">
+                <label asp-for="Value" class="form-label">Оценка</label>
+                <input asp-for="Value" class="form-control" type="text" />
                 <span asp-validation-for="Value" class="text-danger"></span>
             </div>
 
-            <div class="d-flex gap-2 mt-2 border-top border-dark pt-3">
-                <button type="submit" class="btn btn-dark px-4 fw-bold">ЗАПАЗИ</button>
-                <a asp-action="Index" class="btn btn-outline-dark px-4 fw-bold">ОТКАЗ</a>
+            <div style="border-top: 1px solid #eee; padding-top: 15px; display: flex; gap: 10px;">
+                <button type="submit" class="btn-save">ЗАПАЗИ</button>
+                <a asp-action="Index" class="btn-cancel">ОТКАЗ</a>
             </div>
         </form>
     </div>

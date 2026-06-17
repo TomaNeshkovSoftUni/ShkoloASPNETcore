@@ -5,44 +5,87 @@
     ViewData["Title"] = "Изтриване на отзив";
 }
 
-<div class="container mt-4">
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .card-header-red {
+        background-color: #E7505A;
+        color: white;
+        padding: 15px;
+        font-size: 18px;
+    }
+
+    .btn-delete-confirm {
+        background-color: #E7505A;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+    }
+
+    .btn-cancel {
+        background-color: #eee;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 8px 15px;
+        text-decoration: none;
+    }
+
+    .info-row {
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .info-label {
+        color: #3979B2;
+        width: 100px;
+        display: inline-block;
+    }
+</style>
+
+<div class="container mt-4 bare-bones">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card border-danger shadow">
-                <div class="card-header bg-danger text-white">
-                    <h4 class="mb-0">⚠️ Потвърждение за изтриване</h4>
+            <div class="card" style="border: 1px solid #E7505A;">
+                <div class="card-header-red">
+                    Потвърждение за изтриване
                 </div>
                 <div class="card-body p-4">
-                    <p class="lead text-center">Сигурни ли сте, че искате да изтриете този отзив от дневника?</p>
-                    <hr />
+                    <p style="text-align: center; font-size: 16px; margin-bottom: 20px;">Сигурни ли сте, че искате да изтриете този отзив от дневника?</p>
+                    <hr style="border-top: 1px solid #eee; margin-bottom: 20px;" />
 
-                    <div class="mb-3">
-                        <strong>Ученик:</strong> @Model.Student?.FirstName @Model.Student?.LastName
+                    <div class="info-row">
+                        <span class="info-label">Ученик:</span> @Model.Student?.FirstName @Model.Student?.LastName
                     </div>
-                    <div class="mb-3">
-                        <strong>Предмет:</strong> @Model.Subject?.Name
+                    <div class="info-row">
+                        <span class="info-label">Предмет:</span> @Model.Subject?.Name
                     </div>
-                    <div class="mb-3">
-                        <strong>Тип:</strong>
-                        <span class="badge @(Model.Type == RemarkType.Похвала ? "bg-success" : "bg-danger")">
+                    <div class="info-row">
+                        <span class="info-label">Тип:</span>
+                        <span style="color: @(Model.Type == RemarkType.Похвала ? "#C49F47" : "#E7505A");">
                             @Model.Type.ToString()
                         </span>
                     </div>
-                    <div class="mb-3">
-                        <strong>Проява:</strong> <span class="text-primary fw-bold">@Model.Label</span>
+                    <div class="info-row">
+                        <span class="info-label">Проява:</span> @Model.Label
                     </div>
                     @if (!string.IsNullOrEmpty(Model.Comment))
                     {
-                        <div class="mb-3">
-                            <strong>Детайли:</strong> <span class="text-muted">@Model.Comment</span>
+                        <div class="info-row">
+                            <span class="info-label">Детайли:</span> @Model.Comment
                         </div>
                     }
 
                     <form asp-action="Delete" class="mt-4">
                         <input type="hidden" asp-for="Id" />
                         <div class="d-flex justify-content-between">
-                            <a asp-action="Index" class="btn btn-secondary">Отказ</a>
-                            <button type="submit" class="btn btn-danger fw-bold">Да, ИЗТРИЙ ЗАПИСА</button>
+                            <a asp-action="Index" class="btn-cancel">Отказ</a>
+                            <button type="submit" class="btn-delete-confirm">Да, изтрий записа</button>
                         </div>
                     </form>
                 </div>

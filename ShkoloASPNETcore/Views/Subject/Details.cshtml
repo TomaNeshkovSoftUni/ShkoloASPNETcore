@@ -4,24 +4,84 @@
     ViewData["Title"] = "Детайли за Предмет";
 }
 
-<div class="container mt-4">
-    <h2 class="text-uppercase fw-bold border-bottom border-dark pb-2 mb-4">Детайли за Предмет</h2>
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
 
-    <div class="card p-4 shadow-sm" style="max-width: 600px;">
-        <dl class="row mb-0">
-            <dt class="col-sm-4 fw-bold text-muted">Име на предмета:</dt>
-            <dd class="col-sm-8 fw-bold text-dark">@Model.Name</dd>
+    .header-blue {
+        color: #3979B2;
+        font-size: 24px;
+        border-bottom: 2px solid #3979B2;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        margin-top: 0;
+    }
 
-            <dt class="col-sm-4 fw-bold text-muted">Водещ учител:</dt>
-            <dd class="col-sm-8">@Model.Teacher?.FirstName @Model.Teacher?.LastName</dd>
-        </dl>
+    .card-custom {
+        border: 1px solid #ccc;
+        padding: 20px;
+        max-width: 600px;
+    }
 
-        <div class="d-flex gap-2 mt-4 border-top border-dark pt-3">
+    .info-row {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+    }
+
+    .info-label {
+        color: #666;
+        width: 150px;
+        display: inline-block;
+    }
+
+    .info-value {
+        color: #333;
+    }
+
+    .btn-edit {
+        background-color: #C49F47;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-cancel {
+        background-color: #eee;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 8px 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+</style>
+
+<div class="container mt-4 bare-bones">
+    <h2 class="header-blue"><i class="fas fa-info-circle"></i> Детайли за Предмет</h2>
+
+    <div class="card-custom">
+        <div class="info-row">
+            <span class="info-label">Име на предмета:</span>
+            <span class="info-value" style="color: #3979B2;">@Model.Name</span>
+        </div>
+        <div class="info-row" style="border-bottom: none;">
+            <span class="info-label">Водещ учител:</span>
+            <span class="info-value">@Model.Teacher?.FirstName @Model.Teacher?.LastName</span>
+        </div>
+
+        <div style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 15px; display: flex; gap: 10px;">
             @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
             {
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-dark px-4 fw-bold">КОРИГИРАЙ</a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit"><i class="fas fa-edit"></i> КОРИГИРАЙ</a>
             }
-            <a asp-action="Index" class="btn btn-outline-dark px-4 fw-bold">ОТКАЗ</a>
+            <a asp-action="Index" class="btn-cancel"><i class="fas fa-arrow-left"></i> ОТКАЗ</a>
         </div>
     </div>
 </div>

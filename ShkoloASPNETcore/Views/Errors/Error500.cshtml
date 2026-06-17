@@ -2,11 +2,56 @@
     ViewData["Title"] = "Грешка 500";
 }
 
-<div class="container text-center mt-5">
-    <div class="p-5 bg-white border border-dark rounded-0 shadow-sm d-inline-block">
-        <h1 class="text-dark fw-bold mb-3">Грешка 500</h1>
-        <h4 class="text-dark mb-4">Възникна системна грешка на сървъра!</h4>
-        <p class="text-muted small mb-4">Опитайте отново по-късно или се свържете с поддръжката на платформата.</p>
-        <a asp-controller="Home" asp-action="Index" class="btn btn-dark rounded-0 px-4">Назад към таблото</a>
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .error-container {
+        border: 1px solid #3979B2;
+        padding: 40px;
+        max-width: 500px;
+        margin: 50px auto;
+        text-align: center;
+    }
+
+    .error-title {
+        color: #3979B2;
+        font-size: 36px;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    .error-subtitle {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .error-text {
+        color: #666;
+        margin-bottom: 25px;
+        font-size: 14px;
+    }
+
+    .btn-back {
+        background-color: #3979B2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-decoration: none;
+        display: inline-block;
+    }
+</style>
+
+<div class="bare-bones">
+    <div class="error-container">
+        <h1 class="error-title"><i class="fas fa-server"></i> Грешка 500</h1>
+        <div class="error-subtitle">Възникна системна грешка на сървъра!</div>
+        <div class="error-text">Опитайте отново по-късно или се свържете с поддръжката на платформата.</div>
+        <a asp-controller="Home" asp-action="Index" class="btn-back"><i class="fas fa-home"></i> Назад към таблото</a>
     </div>
 </div>

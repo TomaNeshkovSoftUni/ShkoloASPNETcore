@@ -3,17 +3,132 @@
     ViewData["Title"] = "Отсъствия";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-end mb-3 border-bottom border-dark pb-2">
-        <h2 class="m-0 text-uppercase fw-bold">Отсъствия</h2>
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        text-transform: none !important;
+    }
+
+    .header-container {
+        border-bottom: 2px solid #3979B2;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-blue {
+        color: #3979B2;
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .alert-success-custom {
+        background-color: #3979B2;
+        color: white;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #2b5c8a;
+    }
+
+    .alert-error-custom {
+        background-color: #E7505A;
+        color: white;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #c9303b;
+    }
+
+    .btn-add {
+        background-color: #3979B2;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-edit {
+        background-color: #C49F47;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    .btn-delete {
+        background-color: #E7505A;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #3979B2;
+        color: white;
+    }
+
+    .badge-custom {
+        padding: 3px 8px;
+        color: white;
+        display: inline-block;
+        font-size: 12px;
+    }
+
+    .bg-absent {
+        background-color: #E7505A;
+    }
+
+    .bg-late {
+        background-color: #C49F47;
+    }
+</style>
+
+<div class="container mt-4 bare-bones">
+    <div class="header-container">
+        <h2 class="header-blue"><i class="fas fa-clipboard-list"></i> Отсъствия</h2>
         @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
         {
-            <a asp-action="Create" class="btn btn-dark">ВЪВЕДИ ОТСЪСТВИЕ</a>
+            <a asp-action="Create" class="btn-add"><i class="fas fa-plus"></i> ВЪВЕДИ ОТСЪСТВИЕ</a>
         }
     </div>
 
-    <table class="table table-bordered table-striped align-middle">
-        <thead class="table-dark">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-success-custom">
+            <i class="fas fa-check"></i> @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert-error-custom">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <table>
+        <thead>
             <tr>
                 <th>УЧЕНИК</th>
                 <th>ПРЕДМЕТ</th>
@@ -22,7 +137,7 @@
                 <th>ДАТА</th>
                 @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
                 {
-                    <th style="width: 220px;" class="text-center">ДЕЙСТВИЯ</th>
+                    <th style="width: 220px; text-align: center;">ДЕЙСТВИЯ</th>
                 }
             </tr>
         </thead>
@@ -30,30 +145,26 @@
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="@(User.IsInRole("Teacher") || User.IsInRole("Administrator") ? "6" : "5")" class="text-center p-3">Няма намерени отсъствия.</td>
+                    <td colspan="@(User.IsInRole("Teacher") || User.IsInRole("Administrator") ? "6" : "5")" style="text-align: center; padding: 15px; color: #666;">Няма намерени отсъствия.</td>
                 </tr>
             }
             @foreach (var item in Model)
             {
                 <tr>
-                    <td class="fw-bold text-dark">@item.Student?.FirstName @item.Student?.LastName</td>
+                    <td style="color: #3979B2;">@item.Student?.FirstName @item.Student?.LastName</td>
                     <td>@item.Subject?.Name</td>
                     <td>@item.Subject?.Teacher?.FirstName @item.Subject?.Teacher?.LastName</td>
                     <td>
-                        <span class="badge @(item.Type.ToString() == "Закъснение" ? "bg-warning text-dark" : "bg-danger") rounded-0">
+                        <span class="badge-custom @(item.Type.ToString() == "Закъснение" ? "bg-late" : "bg-absent")">
                             @item.Type.ToString()
                         </span>
                     </td>
                     <td>@item.DateIssued.ToString("dd.MM.yyyy")</td>
                     @if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
                     {
-                        <td class="text-center">
-                            <div class="d-flex gap-1 justify-content-center">
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark">КОРИГИРАЙ</a>
-                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Наистина ли искате да изтриете този запис?');" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-danger">ИЗТРИЙ</button>
-                                </form>
-                            </div>
+                        <td style="text-align: center;">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn-edit"><i class="fas fa-edit"></i> КОРИГИРАЙ</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn-delete"><i class="fas fa-trash"></i> ИЗТРИЙ</a>
                         </td>
                     }
                 </tr>

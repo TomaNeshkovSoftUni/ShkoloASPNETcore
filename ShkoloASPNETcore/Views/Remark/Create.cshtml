@@ -5,56 +5,93 @@
     ViewData["Title"] = "Въвеждане на забележка/похвала";
 }
 
-<div class="container mt-4">
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #ccc;
+        padding: 8px;
+    }
+
+    .card-header-blue {
+        background-color: #3979B2;
+        color: white;
+        padding: 15px;
+        font-size: 18px;
+    }
+
+    .btn-save {
+        background-color: #3979B2;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+    }
+
+    .btn-cancel {
+        background-color: #eee;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 8px 15px;
+        text-decoration: none;
+    }
+</style>
+
+<div class="container mt-4 bare-bones">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Нов отзив в дневника</h4>
+            <div class="card" style="border: 1px solid #3979B2;">
+                <div class="card-header-blue">
+                    Нов отзив в дневника
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                        <div class="form-group mb-3">
-                            <label class="form-label font-weight-bold">Изберете ученик</label>
+                        <div class="mb-3">
+                            <label class="form-label" style="color: #3979B2;">Изберете ученик</label>
                             <select asp-for="StudentId" class="form-select" asp-items="ViewBag.Students">
                                 <option value="">-- Изберете ученик --</option>
                             </select>
                             <span asp-validation-for="StudentId" class="text-danger"></span>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label class="form-label font-weight-bold">Предмет</label>
+                        <div class="mb-3">
+                            <label class="form-label" style="color: #3979B2;">Предмет</label>
                             <select asp-for="SubjectId" class="form-select" asp-items="ViewBag.Subjects">
                                 <option value="">-- Изберете предмет --</option>
                             </select>
                             <span asp-validation-for="SubjectId" class="text-danger"></span>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label class="form-label font-weight-bold">Тип на отзива</label>
+                        <div class="mb-3">
+                            <label class="form-label" style="color: #3979B2;">Тип на отзива</label>
                             <select asp-for="Type" id="remarkTypeSelect" class="form-select" asp-items="Html.GetEnumSelectList<RemarkType>()"></select>
                             <span asp-validation-for="Type" class="text-danger"></span>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label class="form-label font-weight-bold">Конкретна проява (Фраза)</label>
+                        <div class="mb-3">
+                            <label class="form-label" style="color: #3979B2;">Конкретна проява (Фраза)</label>
                             <select asp-for="SelectedText" id="selectedTextSelect" class="form-select">
                                 <option value="">-- Изберете проява --</option>
                             </select>
                             <span asp-validation-for="SelectedText" class="text-danger"></span>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label class="form-label font-weight-bold">Допълнителен коментар</label>
+                        <div class="mb-3">
+                            <label class="form-label" style="color: #3979B2;">Допълнителен коментар</label>
                             <textarea asp-for="Comment" class="form-control" rows="3" placeholder="Въведете детайли (незадължително)..."></textarea>
                             <span asp-validation-for="Comment" class="text-danger"></span>
                         </div>
 
                         <div class="d-flex justify-content-between mt-4">
-                            <a asp-action="Index" class="btn btn-secondary">Отказ</a>
-                            <button type="submit" class="btn btn-success">Запиши в дневника</button>
+                            <a asp-action="Index" class="btn-cancel">Отказ</a>
+                            <button type="submit" class="btn-save">Запиши в дневника</button>
                         </div>
                     </form>
                 </div>
@@ -67,20 +104,16 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
     <script>
         const praises = @Json.Serialize(ShkoloASPNETcore.Web.Models.RemarkFormViewModel.Praises);
         const penalties = @Json.Serialize(ShkoloASPNETcore.Web.Models.RemarkFormViewModel.Penalties);
-
         const typeSelect = document.getElementById('remarkTypeSelect');
         const textSelect = document.getElementById('selectedTextSelect');
 
         function updatePhrases() {
             const selectedType = typeSelect.value;
             textSelect.innerHTML = '<option value="">-- Изберете проява --</option>';
-
             const listToUse = (selectedType == "0") ? praises : penalties;
-
             listToUse.forEach(phrase => {
                 const option = document.createElement('option');
                 option.value = phrase;
@@ -88,7 +121,6 @@
                 textSelect.appendChild(option);
             });
         }
-
         typeSelect.addEventListener('change', updatePhrases);
         document.addEventListener('DOMContentLoaded', updatePhrases);
     </script>

@@ -5,41 +5,103 @@
     ViewData["Title"] = "Корекция на отсъствие/закъснение";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-dark text-white">
-                    <h4 class="mb-0 text-uppercase">Промяна на статус</h4>
-                </div>
-                <div class="card-body p-4">
-                    <div class="alert alert-secondary mb-4 border-dark">
-                        <div class="mb-1"><strong>Ученик:</strong> @Model.Student?.FirstName @Model.Student?.LastName</div>
-                        <div><strong>Предмет:</strong> @Model.Subject?.Name</div>
-                    </div>
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
 
-                    <form asp-action="Edit">
-                        <input type="hidden" asp-for="Id" />
-                        <input type="hidden" asp-for="StudentId" />
-                        <input type="hidden" asp-for="SubjectId" />
-                        <input type="hidden" asp-for="DateIssued" />
+    .header-gold {
+        color: #C49F47;
+        font-size: 24px;
+        border-bottom: 2px solid #C49F47;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        margin-top: 0;
+    }
 
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    .card-custom {
+        border: 1px solid #C49F47;
+        padding: 20px;
+        max-width: 600px;
+    }
 
-                        <div class="form-group mb-4">
-                            <label class="form-label font-weight-bold">Нов тип на записа</label>
-                            <select asp-for="Type" class="form-select" asp-items="Html.GetEnumSelectList<AbsenceType>()"></select>
-                            <span asp-validation-for="Type" class="text-danger"></span>
-                        </div>
+    .info-box {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
 
-                        <div class="d-flex justify-content-between mt-4">
-                            <a asp-action="Index" class="btn btn-secondary">Отказ</a>
-                            <button type="submit" class="btn btn-dark">Запази промените</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    .form-control, .form-select {
+        border: 1px solid #ccc;
+        padding: 8px;
+        width: 100%;
+        margin-bottom: 5px;
+        box-sizing: border-box;
+    }
+
+    .form-label {
+        color: #3979B2;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .btn-save {
+        background-color: #C49F47;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-cancel {
+        background-color: #eee;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 8px 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .text-danger {
+        color: #E7505A !important;
+        font-size: 14px;
+    }
+</style>
+
+<div class="container mt-4 bare-bones">
+    <h2 class="header-gold"><i class="fas fa-edit"></i> Промяна на статус</h2>
+
+    <div class="card-custom">
+        <div class="info-box">
+            <div style="margin-bottom: 5px;"><span style="color: #666;">Ученик:</span> @Model.Student?.FirstName @Model.Student?.LastName</div>
+            <div><span style="color: #666;">Предмет:</span> @Model.Subject?.Name</div>
         </div>
+
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="StudentId" />
+            <input type="hidden" asp-for="SubjectId" />
+            <input type="hidden" asp-for="DateIssued" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-4" style="margin-bottom: 20px;">
+                <label class="form-label">Нов тип на записа</label>
+                <select asp-for="Type" class="form-select" asp-items="Html.GetEnumSelectList<AbsenceType>()"></select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div style="border-top: 1px solid #eee; padding-top: 15px; display: flex; gap: 10px;">
+                <button type="submit" class="btn-save"><i class="fas fa-check"></i> ЗАПАЗИ ПРОМЕНИТЕ</button>
+                <a asp-action="Index" class="btn-cancel"><i class="fas fa-arrow-left"></i> ОТКАЗ</a>
+            </div>
+        </form>
     </div>
 </div>
 

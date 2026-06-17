@@ -24,7 +24,10 @@ namespace ShkoloASPNETcore.Services
 
         public async Task<Grade?> GetGradeByIdAsync(int id)
         {
-            return await _context.Grades.FindAsync(id);
+            return await _context.Grades
+                .Include(g => g.Student)
+                .Include(g => g.Subject)
+                .FirstOrDefaultAsync(g => g.Id == id);
         }
 
         public async Task AddGradeAsync(Grade grade)

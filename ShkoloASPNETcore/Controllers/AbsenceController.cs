@@ -113,10 +113,20 @@ namespace ShkoloASPNETcore.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         [Authorize(Roles = "Teacher,Administrator")]
         public async Task<IActionResult> Delete(int id)
+        {
+            var absence = await _absenceService.GetAbsenceByIdAsync(id);
+            if (absence == null) return NotFound();
+
+            return View(absence);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher,Administrator")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _absenceService.DeleteAbsenceAsync(id);
             TempData["SuccessMessage"] = "Отсъствието беше изтрито успешно!";

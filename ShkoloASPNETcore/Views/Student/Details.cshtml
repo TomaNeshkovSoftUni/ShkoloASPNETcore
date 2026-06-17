@@ -4,29 +4,75 @@
     ViewData["Title"] = "Детайли за Ученик";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-info text-white">
-                    <h4 class="mb-0">ℹ️ Профил на ученика</h4>
-                </div>
-                <div class="card-body p-4">
-                    <div class="mb-3 border-bottom pb-2">
-                        <strong>Име:</strong> <span class="fw-bold fs-5">@Model.FirstName @Model.LastName</span>
-                    </div>
-                    <div class="mb-3 border-bottom pb-2">
-                        <strong>Системно ID (Student ID):</strong> <span class="badge bg-secondary">@Model.Id</span>
-                    </div>
-                    <div class="mb-3 border-bottom pb-2">
-                        <strong>Потребителско ID (User ID):</strong> <span class="text-muted small">@Model.ApplicationUserId</span>
-                    </div>
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
 
-                    <div class="mt-4 text-center">
-                        <a asp-action="Index" class="btn btn-secondary">Назад към списъка</a>
-                    </div>
-                </div>
-            </div>
+    .header-blue {
+        color: #3979B2;
+        font-size: 24px;
+        border-bottom: 2px solid #3979B2;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        margin-top: 0;
+    }
+
+    .card-custom {
+        border: 1px solid #ccc;
+        padding: 20px;
+        max-width: 600px;
+    }
+
+    .info-row {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+    }
+
+    .info-label {
+        color: #666;
+        width: 200px;
+        display: inline-block;
+    }
+
+    .info-value {
+        color: #333;
+    }
+
+    .btn-cancel {
+        background-color: #eee;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 8px 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+</style>
+
+<div class="container mt-4 bare-bones">
+    <h2 class="header-blue"><i class="fas fa-user-graduate"></i> Профил на ученика</h2>
+
+    <div class="card-custom">
+        <div class="info-row">
+            <span class="info-label">Име:</span>
+            <span class="info-value" style="color: #3979B2;">@Model.FirstName @Model.LastName</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Системно ID:</span>
+            <span class="info-value">@Model.Id</span>
+        </div>
+        <div class="info-row" style="border-bottom: none;">
+            <span class="info-label">Потребителско ID:</span>
+            <span class="info-value" style="color: #999; font-size: 12px;">@Model.ApplicationUserId</span>
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <a asp-action="Index" class="btn-cancel"><i class="fas fa-arrow-left"></i> Назад към списъка</a>
         </div>
     </div>
 </div>

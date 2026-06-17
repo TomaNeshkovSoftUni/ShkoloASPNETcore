@@ -3,53 +3,138 @@
     ViewData["Title"] = "Предмети";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-end mb-3 border-bottom border-dark pb-2">
-        <h2 class="m-0 text-uppercase fw-bold">Предмети</h2>
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        text-transform: none !important;
+    }
+
+    .header-container {
+        border-bottom: 2px solid #3979B2;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-blue {
+        color: #3979B2;
+        font-size: 24px;
+        margin: 0;
+    }
+
+    .alert-error-custom {
+        background-color: #E7505A;
+        color: white;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #c9303b;
+    }
+
+    .btn-add {
+        background-color: #3979B2;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-details {
+        background-color: #eee;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    .btn-edit {
+        background-color: #C49F47;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    .btn-delete {
+        background-color: #E7505A;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #3979B2;
+        color: white;
+    }
+</style>
+
+<div class="container mt-4 bare-bones">
+    <div class="header-container">
+        <h2 class="header-blue"><i class="fas fa-book"></i> Предмети</h2>
         @if (User.IsInRole("Administrator"))
         {
-            <a asp-action="Create" class="btn btn-dark">СЪЗДАЙ ПРЕДМЕТ</a>
+            <a asp-action="Create" class="btn-add"><i class="fas fa-plus"></i> СЪЗДАЙ ПРЕДМЕТ</a>
         }
     </div>
 
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
-            @TempData["ErrorMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert-error-custom">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
         </div>
     }
 
-    <table class="table table-bordered table-striped">
+    <table>
         <thead>
             <tr>
                 <th>ИМЕ НА ПРЕДМЕТА</th>
                 <th>ВОДЕЩ УЧИТЕЛ</th>
-                <th style="width: 250px;">ДЕЙСТВИЯ</th>
+                <th style="width: 250px; text-align: center;">ДЕЙСТВИЯ</th>
             </tr>
         </thead>
         <tbody>
             @if (!Model.Any())
             {
                 <tr>
-                    <td colspan="3" class="text-center p-3">Няма намерени предмети.</td>
+                    <td colspan="3" style="text-align: center; padding: 15px; color: #666;">Няма намерени предмети.</td>
                 </tr>
             }
             @foreach (var item in Model)
             {
                 <tr>
-                    <td class="fw-bold text-dark">@item.Name</td>
+                    <td style="color: #3979B2;">@item.Name</td>
                     <td>@item.Teacher?.FirstName @item.Teacher?.LastName</td>
-                    <td>
-                        <div class="d-flex gap-1">
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-dark">ДЕТАЙЛИ</a>
+                    <td style="text-align: center;">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn-details"><i class="fas fa-info-circle"></i> ДЕТАЙЛИ</a>
 
-                            @if (User.IsInRole("Administrator"))
-                            {
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-dark">КОРИГИРАЙ</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">ИЗТРИЙ</a>
-                            }
-                        </div>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn-edit"><i class="fas fa-edit"></i> КОРИГИРАЙ</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn-delete"><i class="fas fa-trash"></i> ИЗТРИЙ</a>
+                        }
                     </td>
                 </tr>
             }

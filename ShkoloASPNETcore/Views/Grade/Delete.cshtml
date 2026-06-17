@@ -3,27 +3,90 @@
     ViewData["Title"] = "Изтриване";
 }
 
-<div class="container mt-4">
-    <div class="alert alert-danger bg-white border-dark text-dark fw-bold mb-4 rounded-0" role="alert">
+<style>
+    .bare-bones * {
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .alert-danger-custom {
+        background-color: #fff;
+        border: 1px solid #E7505A;
+        color: #E7505A;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .card-custom {
+        border: 1px solid #E7505A;
+        padding: 20px;
+        max-width: 600px;
+    }
+
+    .info-row {
+        margin-bottom: 10px;
+        display: flex;
+    }
+
+    .info-label {
+        color: #333;
+        width: 120px;
+        display: inline-block;
+    }
+
+    .info-value {
+        color: #333;
+    }
+
+    .val-danger {
+        color: #E7505A;
+    }
+
+    .btn-delete {
+        background-color: #E7505A;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-cancel {
+        background-color: #eee;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 8px 15px;
+        text-decoration: none;
+        display: inline-block;
+    }
+</style>
+
+<div class="container mt-4 bare-bones">
+    <div class="alert-danger-custom">
         СИГУРНИ ЛИ СТЕ, ЧЕ ИСКАТЕ ДА ИЗТРИЕТЕ ТОЗИ ЗАПИС? ТОВА ДЕЙСТВИЕ Е НЕОБРАТИМО.
     </div>
 
-    <div class="card p-4" style="max-width: 600px;">
-        <dl class="row mb-0">
-            <dt class="col-sm-4">Стойност:</dt>
-            <dd class="col-sm-8 fw-bold text-danger">@Model.Value</dd>
+    <div class="card-custom">
+        <div class="info-row">
+            <span class="info-label">Стойност:</span>
+            <span class="info-value val-danger">@Model.Value</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Дата:</span>
+            <span class="info-value">@Model.DateIssued.ToString("dd.MM.yyyy")</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Предмет:</span>
+            <span class="info-value">@Model.Subject?.Name</span>
+        </div>
 
-            <dt class="col-sm-4">Дата:</dt>
-            <dd class="col-sm-8">@Model.DateIssued.ToString("dd.MM.yyyy")</dd>
-
-            <dt class="col-sm-4">Предмет:</dt>
-            <dd class="col-sm-8">@Model.Subject?.Name</dd>
-        </dl>
-
-        <form asp-action="Delete" method="post" class="mt-4 border-top border-dark pt-3 d-flex gap-2">
+        <form asp-action="Delete" method="post" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: flex; gap: 10px;">
             <input type="hidden" asp-for="Id" />
-            <button type="submit" class="btn btn-danger px-4">ПОТВЪРДИ ИЗТРИВАНЕТО</button>
-            <a asp-action="Index" class="btn btn-outline-dark px-4">ОТКАЗ</a>
+            <button type="submit" class="btn-delete">ПОТВЪРДИ ИЗТРИВАНЕТО</button>
+            <a asp-action="Index" class="btn-cancel">ОТКАЗ</a>
         </form>
     </div>
 </div>

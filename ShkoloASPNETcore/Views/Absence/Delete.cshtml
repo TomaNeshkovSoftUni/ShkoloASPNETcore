@@ -1,7 +1,7 @@
-﻿@model ShkoloASPNETcore.Infrastructure.Data.Models.Subject
+﻿@model ShkoloASPNETcore.Infrastructure.Data.Models.Absence
 
 @{
-    ViewData["Title"] = "Изтрий Предмет";
+    ViewData["Title"] = "Изтриване на запис";
 }
 
 <style>
@@ -63,34 +63,34 @@
         text-decoration: none;
         display: inline-block;
     }
-
-    .warning-text {
-        color: #666;
-        font-size: 12px;
-        margin-bottom: 15px;
-        display: block;
-    }
 </style>
 
 <div class="container mt-4 bare-bones">
     <div class="alert-danger-custom">
-        <i class="fas fa-exclamation-triangle"></i> СИГУРНИ ЛИ СТЕ, ЧЕ ИСКАТЕ ДА ИЗТРИЕТЕ ТОЗИ ПРЕДМЕТ?
-        <span class="warning-text">Внимание: Това действие може да изтрие и свързаните с предмета оценки!</span>
+        <i class="fas fa-exclamation-triangle"></i> СИГУРНИ ЛИ СТЕ, ЧЕ ИСКАТЕ ДА ИЗТРИЕТЕ ТОЗИ ЗАПИС ОТ ДНЕВНИКА? ТОВА ДЕЙСТВИЕ Е НЕОБРАТИМО.
     </div>
 
     <div class="card-custom">
         <div class="info-row">
-            <span class="info-label">Предмет:</span>
-            <span class="info-value val-danger">@Model.Name</span>
+            <span class="info-label">Ученик:</span>
+            <span class="info-value val-danger">@Model.Student?.FirstName @Model.Student?.LastName</span>
         </div>
         <div class="info-row">
-            <span class="info-label">Учител:</span>
-            <span class="info-value">@Model.Teacher?.FirstName @Model.Teacher?.LastName</span>
+            <span class="info-label">Предмет:</span>
+            <span class="info-value">@Model.Subject?.Name</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Тип:</span>
+            <span class="info-value">@Model.Type.ToString()</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Дата:</span>
+            <span class="info-value">@Model.DateIssued.ToString("dd.MM.yyyy")</span>
         </div>
 
-        <form asp-action="Delete" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: flex; gap: 10px;">
+        <form asp-action="Delete" method="post" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; display: flex; gap: 10px;">
             <input type="hidden" asp-for="Id" />
-            <button type="submit" class="btn-delete"><i class="fas fa-trash"></i> ПОТВЪРДИ ИЗТРИВАНЕ</button>
+            <button type="submit" class="btn-delete"><i class="fas fa-trash"></i> ПОТВЪРДИ ИЗТРИВАНЕТО</button>
             <a asp-action="Index" class="btn-cancel"><i class="fas fa-arrow-left"></i> ОТКАЗ</a>
         </form>
     </div>
