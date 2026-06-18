@@ -3,7 +3,6 @@ using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Infrastructure.Data.Enums;
 using ShkoloASPNETcore.Services;
 using ShkoloASPNETcore.Tests.Infrastructure;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,27 +29,22 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task AddAbsenceAsync_ShouldPersistAbsence()
         {
-            var studentUser = new ApplicationUser { Id = "s-abs", UserName = "s@abs.bg", Email = "s@abs.bg", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
-            var teacherUser = new ApplicationUser { Id = "t-abs", UserName = "t@abs.bg", Email = "t@abs.bg", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
+            var studentUser = Seed.User("s-abs", "s@abs.bg");
+            var teacherUser = Seed.User("t-abs", "t@abs.bg");
             Context.Users.AddRange(studentUser, teacherUser);
 
-            var student = new Student { FirstName = "Петър", LastName = "Георгиев", ApplicationUserId = "s-abs" };
-            var teacher = new Teacher { FirstName = "Иван", LastName = "Петров", Department = "Математика", ApplicationUserId = "t-abs" };
+            var student = Seed.Student("s-abs");
+            var teacher = Seed.Teacher("t-abs");
             Context.Students.Add(student);
             Context.Teachers.Add(teacher);
             await Context.SaveChangesAsync();
 
-            var subject = new Subject { Name = "Математика", TeacherId = teacher.Id };
+            var subject = Seed.Subject(teacher.Id);
             Context.Subjects.Add(subject);
             await Context.SaveChangesAsync();
 
-            var absence = new Absence
-            {
-                Type = AbsenceType.Закъснение,
-                StudentId = student.Id,
-                SubjectId = subject.Id,
-                DateIssued = DateTime.Now
-            };
+            var absence = Seed.Absence(student.Id, subject.Id);
+            absence.Type = AbsenceType.Закъснение;
 
             await _absenceService.AddAbsenceAsync(absence);
             var absences = (await _absenceService.GetAllAbsencesAsync()).ToList();

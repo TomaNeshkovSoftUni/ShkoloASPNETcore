@@ -8,7 +8,7 @@ using ShkoloASPNETcore.Web.Models;
 
 namespace ShkoloASPNETcore.Web.Controllers
 {
-    [Authorize] // Позволява на ВСИЧКИ логнати потребители (включително ученици) да влизат тук
+    [Authorize]
     public class RemarkController : Controller
     {
         private readonly IRemarkService _remarkService;
@@ -28,24 +28,20 @@ namespace ShkoloASPNETcore.Web.Controllers
             _userManager = userManager;
         }
 
-        // СИГУРЕН INDEX МЕТОД: Филтрира спрямо ролята
         public async Task<IActionResult> Index()
         {
-            // 1. Ако потребителят е Учител или Администратор - вижда абсолютно всичко
             if (User.IsInRole("Teacher") || User.IsInRole("Administrator"))
             {
                 var allRemarks = await _remarkService.GetAllRemarksAsync();
                 return View(allRemarks);
             }
 
-            // 2. Ако е Ученик - намираме неговия профил и му показваме само неговите отзиви
             var userId = _userManager.GetUserId(User);
             if (userId == null) return Challenge();
 
             var student = await _studentService.GetStudentByUserIdAsync(userId);
             if (student == null)
             {
-                // Защита: Ако профилът на ученика още не е генериран в базата
                 return View(new List<Remark>());
             }
 
@@ -54,7 +50,7 @@ namespace ShkoloASPNETcore.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Teacher,Administrator")] // Само те могат да създават
+        [Authorize(Roles = "Teacher,Administrator")]
         public async Task<IActionResult> Create()
         {
             ViewBag.Students = new SelectList(await _studentService.GetAllStudentsAsync(), "Id", "LastName");
@@ -93,7 +89,7 @@ namespace ShkoloASPNETcore.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Teacher,Administrator")] // Само те могат да редактират
+        [Authorize(Roles = "Teacher,Administrator")]
         public async Task<IActionResult> Edit(int id)
         {
             var remark = await _remarkService.GetRemarkByIdAsync(id);

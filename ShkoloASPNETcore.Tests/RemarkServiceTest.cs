@@ -3,7 +3,6 @@ using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Infrastructure.Data.Enums;
 using ShkoloASPNETcore.Services;
 using ShkoloASPNETcore.Tests.Infrastructure;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,30 +29,24 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task AddRemarkAsync_ShouldSaveRemarkSuccessfully()
         {
-            var studentUser = new ApplicationUser { Id = "s-rem", UserName = "s@rem.bg", Email = "s@rem.bg", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
-            var teacherUser = new ApplicationUser { Id = "t-rem", UserName = "t@rem.bg", Email = "t@rem.bg", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
+            var studentUser = Seed.User("s-rem", "s@rem.bg");
+            var teacherUser = Seed.User("t-rem", "t@rem.bg");
             Context.Users.AddRange(studentUser, teacherUser);
 
-            var student = new Student { FirstName = "Николай", LastName = "Колев", ApplicationUserId = "s-rem" };
-            var teacher = new Teacher { FirstName = "Иван", LastName = "Петров", Department = "История", ApplicationUserId = "t-rem" };
+            var student = Seed.Student("s-rem");
+            var teacher = Seed.Teacher("t-rem");
             Context.Students.Add(student);
             Context.Teachers.Add(teacher);
             await Context.SaveChangesAsync();
 
-            var subject = new Subject { Name = "История", TeacherId = teacher.Id };
+            var subject = Seed.Subject(teacher.Id);
             Context.Subjects.Add(subject);
             await Context.SaveChangesAsync();
 
-            var remark = new Remark
-            {
-                Comment = "Стабилно поведение в час.",
-                Type = RemarkType.Забележка,
-                StudentId = student.Id,
-                SubjectId = subject.Id,
-                DateIssued = DateTime.Now,
-                Label = "Забележка",
-                Issuer = "Иван Петров"
-            };
+            var remark = Seed.Remark(student.Id, subject.Id);
+            remark.Comment = "Стабилно поведение в час.";
+            remark.Label = "Забележка";
+            remark.Issuer = "Иван Петров";
 
             await _remarkService.AddRemarkAsync(remark);
 
@@ -68,43 +61,32 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task GetRemarksByStudentIdAsync_ShouldReturnOnlyRemarksForTargetStudent()
         {
-            var teacherUser = new ApplicationUser { Id = "t-rem-test", UserName = "t@test.bg", Email = "t@test.bg", FirstName = "Учител", LastName = "Учителов" };
-            Context.Users.Add(teacherUser);
+            var teacherUser = Seed.User("t-rem-test", "t@test.bg");
+            var student1User = Seed.User("u-st", "st");
+            var student2User = Seed.User("u-gg", "gg");
+            Context.Users.AddRange(teacherUser, student1User, student2User);
 
-            var teacher = new Teacher { FirstName = "Иван", LastName = "Петров", Department = "История", ApplicationUserId = "t-rem-test" };
+            var teacher = Seed.Teacher("t-rem-test");
             Context.Teachers.Add(teacher);
             await Context.SaveChangesAsync();
 
-            var subject = new Subject { Name = "История", TeacherId = teacher.Id };
+            var subject = Seed.Subject(teacher.Id);
             Context.Subjects.Add(subject);
-            await Context.SaveChangesAsync();
 
-            var student = new Student { FirstName = "Стефан", LastName = "Стефанов", ApplicationUserId = "u-st" };
-            var otherStudent = new Student { FirstName = "Георги", LastName = "Георгиев", ApplicationUserId = "u-gg" };
+            var student = Seed.Student("u-st");
+            var otherStudent = Seed.Student("u-gg");
             Context.Students.AddRange(student, otherStudent);
             await Context.SaveChangesAsync();
 
-            var remark1 = new Remark
-            {
-                Comment = "Отличен проект",
-                StudentId = student.Id,
-                SubjectId = subject.Id,
-                Type = RemarkType.Забележка,
-                Label = "Похвала",
-                DateIssued = DateTime.Now,
-                Issuer = "Иван... Петров"
-            };
+            var remark1 = Seed.Remark(student.Id, subject.Id);
+            remark1.Comment = "Отличен проект";
+            remark1.Label = "Похвала";
+            remark1.Issuer = "Иван... Петров";
 
-            var remark2 = new Remark
-            {
-                Comment = "Няма домашна",
-                StudentId = otherStudent.Id,
-                SubjectId = subject.Id,
-                Type = RemarkType.Забележка,
-                Label = "Забележка",
-                DateIssued = DateTime.Now,
-                Issuer = "Иван Петров"
-            };
+            var remark2 = Seed.Remark(otherStudent.Id, subject.Id);
+            remark2.Comment = "Няма домашна";
+            remark2.Label = "Забележка";
+            remark2.Issuer = "Иван Петров";
 
             Context.Remarks.AddRange(remark1, remark2);
             await Context.SaveChangesAsync();

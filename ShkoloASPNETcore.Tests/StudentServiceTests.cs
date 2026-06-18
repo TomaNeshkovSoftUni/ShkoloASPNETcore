@@ -28,10 +28,10 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task GetAllStudentsAsync_ShouldReturnStudents()
         {
-            var studentUser = new ApplicationUser { Id = "s3", UserName = "s3", Email = "s3", FirstName = "Тест", LastName = "Тестов" };
+            var studentUser = Seed.User("s3", "s3");
             Context.Users.Add(studentUser);
 
-            var student = new Student { FirstName = "Тест", LastName = "Тестов", ApplicationUserId = "s3" };
+            var student = Seed.Student("s3");
             Context.Students.Add(student);
             await Context.SaveChangesAsync();
 
@@ -45,7 +45,10 @@ namespace ShkoloASPNETcore.Tests
         public async Task GetStudentByUserIdAsync_ShouldReturnCorrectStudent_WhenUserExists()
         {
             var userId = "user-stud-123";
-            var student = new Student { FirstName = "Алекс", LastName = "Попов", ApplicationUserId = userId };
+            var student = Seed.Student(userId);
+            student.FirstName = "Алекс";
+            student.LastName = "Попов";
+
             Context.Students.Add(student);
             await Context.SaveChangesAsync();
 
@@ -58,7 +61,10 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task GetStudentByIdAsync_ShouldReturnCorrectStudent()
         {
-            var student = new Student { FirstName = "Елена", LastName = "Георгиева", ApplicationUserId = "u-el" };
+            var student = Seed.Student("u-el");
+            student.FirstName = "Елена";
+            student.LastName = "Георгиева";
+
             Context.Students.Add(student);
             await Context.SaveChangesAsync();
 
@@ -71,7 +77,7 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task DeleteStudentAsync_ShouldRemoveStudentFromDb()
         {
-            var student = new Student { FirstName = "За Изтриване", LastName = "Ученик", ApplicationUserId = "u-del" };
+            var student = Seed.Student("u-del");
             Context.Students.Add(student);
             await Context.SaveChangesAsync();
 

@@ -28,24 +28,14 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task AddTeacherAsync_ShouldSuccessfullySaveTeacherToDatabase()
         {
-            var user = new ApplicationUser
-            {
-                Id = "учител-ид-1",
-                UserName = "teacher1@shkolo.bg",
-                Email = "teacher1@shkolo.bg",
-                FirstName = "СистемноИме",
-                LastName = "СистемнаФамилия"
-            };
+            var user = Seed.User("учител-ид-1", "teacher1@shkolo.bg");
             Context.Users.Add(user);
             await Context.SaveChangesAsync();
 
-            var teacher = new Teacher
-            {
-                FirstName = "Димитър",
-                LastName = "Георгиев",
-                Department = "Математика",
-                ApplicationUserId = "учител-ид-1"
-            };
+            var teacher = Seed.Teacher("учител-ид-1");
+            teacher.FirstName = "Димитър";
+            teacher.LastName = "Георгиев";
+            teacher.Department = "Математика";
 
             await _teacherService.AddTeacherAsync(teacher, "учител-ид-1");
             var teachers = (await _teacherService.GetAllTeachersAsync()).ToList();
@@ -59,23 +49,14 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task GetTeacherByIdAsync_ShouldReturnCorrectTeacher()
         {
-            var user = new ApplicationUser
-            {
-                Id = "учител-ид-2",
-                UserName = "teacher2@shkolo.bg",
-                Email = "teacher2@shkolo.bg",
-                FirstName = "СистемноИме",
-                LastName = "СистемнаФамилия"
-            };
+            var user = Seed.User("учител-ид-2", "teacher2@shkolo.bg");
             Context.Users.Add(user);
 
-            var teacher = new Teacher
-            {
-                FirstName = "Мария",
-                LastName = "Стоянова",
-                Department = "История",
-                ApplicationUserId = "учител-ид-2"
-            };
+            var teacher = Seed.Teacher("учител-ид-2");
+            teacher.FirstName = "Мария";
+            teacher.LastName = "Стоянова";
+            teacher.Department = "История";
+
             Context.Teachers.Add(teacher);
             await Context.SaveChangesAsync();
 
@@ -90,7 +71,7 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task DeleteTeacherAsync_ShouldSuccessfullyRemoveTeacher()
         {
-            var teacher = new Teacher { FirstName = "Христо", LastName = "Ботев", Department = "Литература", ApplicationUserId = "u-xb" };
+            var teacher = Seed.Teacher("u-xb");
             Context.Teachers.Add(teacher);
             await Context.SaveChangesAsync();
 

@@ -28,13 +28,16 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task AddSubjectAsync_ShouldSaveSubjectCorrectly()
         {
-            var user = new ApplicationUser { Id = "t-sub", UserName = "t@sub.bg", Email = "t@sub.bg", FirstName = "У", LastName = "У" };
-            var teacher = new Teacher { FirstName = "Иван", LastName = "Петров", Department = "ИТ", ApplicationUserId = "t-sub" };
+            var user = Seed.User("t-sub", "t@sub.bg");
+            var teacher = Seed.Teacher("t-sub");
+
             Context.Users.Add(user);
             Context.Teachers.Add(teacher);
             await Context.SaveChangesAsync();
 
-            var subject = new Subject { Name = "Бази Данни", TeacherId = teacher.Id };
+            var subject = Seed.Subject(teacher.Id);
+            subject.Name = "Бази Данни";
+
             await _subjectService.AddSubjectAsync(subject);
 
             var subjects = (await _subjectService.GetAllSubjectsAsync()).ToList();

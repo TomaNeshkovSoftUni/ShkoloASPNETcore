@@ -2,7 +2,6 @@
 using ShkoloASPNETcore.Infrastructure.Data.Models;
 using ShkoloASPNETcore.Services;
 using ShkoloASPNETcore.Tests.Infrastructure;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,28 +28,23 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task AddGradeAsync_ShouldSuccessfullySaveGrade()
         {
-            var studentUser = new ApplicationUser { Id = "s1", UserName = "s1", Email = "s1", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
-            var teacherUser = new ApplicationUser { Id = "t1", UserName = "t1", Email = "t1", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
+            var studentUser = Seed.User("s1", "s1");
+            var teacherUser = Seed.User("t1", "t1");
             Context.Users.AddRange(studentUser, teacherUser);
 
-            var student = new Student { FirstName = "Иван", LastName = "Иванов", ApplicationUserId = "s1" };
-            var teacher = new Teacher { FirstName = "Петър", LastName = "Петров", Department = "БЕЛ", ApplicationUserId = "t1" };
+            var student = Seed.Student("s1");
+            var teacher = Seed.Teacher("t1");
             Context.Students.Add(student);
             Context.Teachers.Add(teacher);
             await Context.SaveChangesAsync();
 
-            var subject = new Subject { Name = "Български език", TeacherId = teacher.Id };
+            var subject = Seed.Subject(teacher.Id);
             Context.Subjects.Add(subject);
             await Context.SaveChangesAsync();
 
-            var grade = new Grade
-            {
-                Value = 6.00m,
-                StudentId = student.Id,
-                SubjectId = subject.Id,
-                DateIssued = DateTime.Now,
-                Issuer = "Петър Петров"
-            };
+            var grade = Seed.Grade(student.Id, subject.Id);
+            grade.Value = 6.00m;
+            grade.Issuer = "Петър Петров";
 
             await _gradeService.AddGradeAsync(grade);
 
@@ -64,29 +58,21 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task DeleteGradeAsync_ShouldRemoveGradeFromDatabase()
         {
-            var studentUser = new ApplicationUser { Id = "s2", UserName = "s2", Email = "s2", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
-            var teacherUser = new ApplicationUser { Id = "t2", UserName = "t2", Email = "t2", FirstName = "ПотрИме", LastName = "ПотрФамилия" };
+            var studentUser = Seed.User("s2", "s2");
+            var teacherUser = Seed.User("t2", "t2");
             Context.Users.AddRange(studentUser, teacherUser);
 
-            var student = new Student { FirstName = "Георги", LastName = "Георгиев", ApplicationUserId = "s2" };
-            var teacher = new Teacher { FirstName = "Ангел", LastName = "Ангелов", Department = "ИТ", ApplicationUserId = "t2" };
+            var student = Seed.Student("s2");
+            var teacher = Seed.Teacher("t2");
             Context.Students.Add(student);
             Context.Teachers.Add(teacher);
             await Context.SaveChangesAsync();
 
-            var subject = new Subject { Name = "Информационни технологии", TeacherId = teacher.Id };
+            var subject = Seed.Subject(teacher.Id);
             Context.Subjects.Add(subject);
             await Context.SaveChangesAsync();
 
-            var grade = new Grade
-            {
-                Value = 5.50m,
-                StudentId = student.Id,
-                SubjectId = subject.Id,
-                DateIssued = DateTime.Now,
-                Issuer = "Ангел Ангелов"
-            };
-
+            var grade = Seed.Grade(student.Id, subject.Id);
             Context.Grades.Add(grade);
             await Context.SaveChangesAsync();
 
@@ -99,16 +85,29 @@ namespace ShkoloASPNETcore.Tests
         [Test]
         public async Task GetGradesByStudentIdAsync_ShouldReturnOnlyGradesForThatSpecificStudent()
         {
-            var subject = new Subject { Name = "Математика" };
+            var teacherUser = Seed.User("t3", "t3");
+            var student1User = Seed.User("u-m1", "m1");
+            var student2User = Seed.User("u-t2", "t2");
+            Context.Users.AddRange(teacherUser, student1User, student2User);
+
+            var teacher = Seed.Teacher("t3");
+            Context.Teachers.Add(teacher);
+            await Context.SaveChangesAsync();
+
+            var subject = Seed.Subject(teacher.Id);
             Context.Subjects.Add(subject);
 
-            var student1 = new Student { FirstName = "Мария", LastName = "Петрова", ApplicationUserId = "u-m1" };
-            var student2 = new Student { FirstName = "Тодор", LastName = "Тодоров", ApplicationUserId = "u-t2" };
+            var student1 = Seed.Student("u-m1");
+            var student2 = Seed.Student("u-t2");
             Context.Students.AddRange(student1, student2);
             await Context.SaveChangesAsync();
 
-            var grade1 = new Grade { Value = 6.00m, StudentId = student1.Id, SubjectId = subject.Id, Issuer = "Учител", DateIssued = DateTime.Now };
-            var grade2 = new Grade { Value = 4.00m, StudentId = student2.Id, SubjectId = subject.Id, Issuer = "Учител", DateIssued = DateTime.Now };
+            var grade1 = Seed.Grade(student1.Id, subject.Id);
+            grade1.Value = 6.00m;
+
+            var grade2 = Seed.Grade(student2.Id, subject.Id);
+            grade2.Value = 4.00m;
+
             Context.Grades.AddRange(grade1, grade2);
             await Context.SaveChangesAsync();
 
